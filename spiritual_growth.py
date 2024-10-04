@@ -1,10 +1,28 @@
 import streamlit as st
 import numpy as np
 import plotly.graph_objects as go
+import openai
+
+# Set your OpenAI API key
+openai.api_key = "sk-97s8kUNBEbW-CTETcUliTBSEmwwDyOwHo50B2UuOXET3BlbkFJIbdkGxb29Dj3GDbDtU4aM6OI8QQCQ1kdhofF3PRf0A"
 
 # Functions to store and load values
 def store_value(key):
     st.session_state[key] = st.session_state["_" + key]
+    
+# Create openai connection
+def generate_interpretation(section_name, average_score):
+    prompt = f"""
+    The section "{section_name}" in a spiritual growth assessment has an average score of {average_score} on a scale of 1-5, where 1 means "Never" and 5 means "Always." 
+    Provide an interpretation of what this score means in terms of spiritual growth for the person and offer guidance on how they can improve in this area.
+    """
+    response = openai.Completion.create(
+        engine="text-davinci-004",  # You can choose a different engine if needed
+        prompt=prompt,
+        max_tokens=150,
+        temperature=0.7
+    )
+    return response.choices[0].text.strip()
 
 # Set up session state to manage the current page and user responses
 if "page" not in st.session_state:
@@ -203,5 +221,10 @@ elif st.session_state.page == len(sections) + 2:
     # Brief explanation of the results
     st.header("Results Summary")
     for section, average in averages.items():
-        st.write(f"**{section}:** Your average score is {average:.2f}. This indicates your current level of spiritual growth in this area.")
+        st.write(f"{section}: {average:.2f}")
 
+        # Generate interpretation using OpenAI
+        with st.spinner(f"Interpreting your results for '{section}'..."):
+            interpretation = generate_interpretation(section, average)
+        
+        st.write(interpretation)
