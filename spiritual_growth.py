@@ -8,7 +8,7 @@ from openai import OpenAI
 # client = st.secrets["openai"]["API_KEY"]
 
 # Set your OpenAI API key
-client = OpenAI(api_key = st.secrets["openai"]["API_KEY"]
+client = OpenAI(api_key = st.secrets["openai"]["API_KEY"])
 
 # Functions to store and load values
 def store_value(key):
