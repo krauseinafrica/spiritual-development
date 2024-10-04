@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 import plotly.graph_objects as go
 import openai
+from openai import OpenAI
 
 # Set your OpenAI API key
 openai.api_key = st.secrets["openai"]["api_key"]
