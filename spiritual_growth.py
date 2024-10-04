@@ -22,16 +22,16 @@ def generate_interpretation(section_name, average_score):
     The section "{section_name}" in a spiritual growth assessment has an average score of {average_score} on a scale of 1-5, where 1 means "Never" and 5 means "Always." 
     Provide an interpretation of what this score means in terms of spiritual growth for the person and offer guidance on how they can improve in this area.
     """
-    response = openai.completions.create( # Changed
-    model="gpt-3.5-turbo-instruct", # Changed
-        messages=[
-            {"role": "system", "content": "You are an expert in providing spiritual guidance based on assessment scores."},
-            {"role": "user", "content": prompt}
-        ],
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt=prompt,
         max_tokens=150,
+        n=1,
         temperature=0.7
     )
     return response.choices[0].text.strip()
+
+    
 
 # Set up session state to manage the current page and user responses
 if "page" not in st.session_state:
