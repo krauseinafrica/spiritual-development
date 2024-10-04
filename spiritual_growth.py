@@ -19,12 +19,12 @@ def prev_page():
     if st.session_state.page > 1:
         st.session_state.page -= 1
 
-# Function to calculate average scores for each section
-def calculate_averages(responses, sections):
-    averages = {}
-    for section in sections:
-        averages[section] = np.mean(responses[section])
-    return averages
+# # Function to calculate average scores for each section
+# def calculate_averages(responses, sections):
+#     averages = {}
+#     for section in sections:
+#         averages[section] = np.mean(responses[section])
+#     return averages
 
 # Define the sections and questions
 sections = {
