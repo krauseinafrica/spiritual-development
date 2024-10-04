@@ -22,8 +22,11 @@ def generate_interpretation(section_name, average_score):
     Provide an interpretation of what this score means in terms of spiritual growth for the person and offer guidance on how they can improve in this area.
     """
     response = client.chat.completions.create(
-        engine="text-davinci-004",  # You can choose a different engine if needed
-        prompt=prompt,
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": "You are an expert in providing spiritual guidance based on assessment scores."},
+            {"role": "user", "content": prompt}
+        ],
         max_tokens=150,
         temperature=0.7
     )
