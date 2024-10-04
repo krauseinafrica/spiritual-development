@@ -203,5 +203,5 @@ elif st.session_state.page == len(sections) + 2:
     # Brief explanation of the results
     st.header("Results Summary")
     for section, average in averages.items():
-        st.write(f"{section}: {average:.2f}")
+        st.write(f"**{section}:** Your average score is {average:.2f}. This indicates your current level of spiritual growth in this area.")
 
