@@ -4,10 +4,10 @@ import plotly.graph_objects as go
 import openai
 from openai import OpenAI
 
-# client = OpenAI(api_key = "<API_KEY>")
+client = OpenAI(api_key = "<API_KEY>")
 
 # Set your OpenAI API key
-openai.api_key = st.secrets["openai"]["api_key"]
+# openai.api_key = st.secrets["openai"]["api_key"]
 
 # Functions to store and load values
 def store_value(key):
