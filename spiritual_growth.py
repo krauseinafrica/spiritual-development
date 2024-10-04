@@ -12,6 +12,23 @@ openai.api_key = st.secrets["openai"]["api_key"]
 # Functions to store and load values
 def store_value(key):
     st.session_state[key] = st.session_state["_" + key]
+    
+# Create openai connection
+def generate_interpretation(section_name, average_score):
+    prompt = f"""
+    The section "{section_name}" in a spiritual growth assessment has an average score of {average_score} on a scale of 1-5, where 1 means "Never" and 5 means "Always." 
+    Provide an interpretation of what this score means in terms of spiritual growth for the person and offer guidance on how they can improve in this area.
+    """
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": "You are an expert in providing spiritual guidance based on assessment scores."},
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=150,
+        temperature=0.7
+    )
+    return response['choices'][0]['message']['content'].strip()
 
 # Example usage on the results page
 if st.session_state.page == len(sections) + 2:
@@ -44,23 +61,6 @@ if "parent_name" not in st.session_state:
     st.session_state.parent_name = ""
 if "parent_contact" not in st.session_state:
     st.session_state.parent_contact = ""
-
-# Create openai connection
-def generate_interpretation(section_name, average_score):
-    prompt = f"""
-    The section "{section_name}" in a spiritual growth assessment has an average score of {average_score} on a scale of 1-5, where 1 means "Never" and 5 means "Always." 
-    Provide an interpretation of what this score means in terms of spiritual growth for the person and offer guidance on how they can improve in this area.
-    """
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": "You are an expert in providing spiritual guidance based on assessment scores."},
-            {"role": "user", "content": prompt}
-        ],
-        max_tokens=150,
-        temperature=0.7
-    )
-    return response['choices'][0]['message']['content'].strip()
 
 # Update sections with new questions
 sections = {
@@ -201,8 +201,6 @@ elif 2 <= st.session_state.page <= len(sections) + 1:
             else:
                 st.session_state.page += 1  # Move to the next page
 
-
-    
 # Page for displaying results
 elif st.session_state.page == len(sections) + 2:
     st.header("Results")
