@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import plotly.graph_objects as go
 
-# Set up session state to manage the current page
+# Set up session state to manage the current page and user responses
 if "page" not in st.session_state:
     st.session_state.page = 1
 
@@ -14,6 +14,10 @@ def next_page():
 def prev_page():
     if st.session_state.page > 1:
         st.session_state.page -= 1
+
+# Initialize user responses dictionary in session state
+if "user_responses" not in st.session_state:
+    st.session_state.user_responses = {}
 
 # Update sections with new questions
 sections = {
@@ -91,10 +95,6 @@ sections = {
     ]
 }
 
-# Initialize user responses dictionary in session state
-if "user_responses" not in st.session_state:
-    st.session_state.user_responses = {section: [] for section in sections}
-
 # Page 1: User Information
 if st.session_state.page == 1:
     st.title("Spiritual Growth Assessment")
@@ -105,10 +105,10 @@ if st.session_state.page == 1:
 
     if st.session_state.age < 18:
         st.header("Parent Information")
-        st.session_state.parent_name = st.text_input("Parent's Name (required)")
-        st.session_state.parent_contact = st.text_input("Parent's Contact Information (required)")
+        st.session_state.parent_name = st.text_input("Parent's Name (required)", value="", key="parent_name")
+        st.session_state.parent_contact = st.text_input("Parent's Contact Information (required)", value="", key="parent_contact")
 
-    # Only show the error message when the user clicks the Next button
+    # Show the error message only when the user clicks the Next button
     if st.button("Next"):
         # Validate user input
         if not st.session_state.name:
@@ -122,7 +122,7 @@ if st.session_state.page == 1:
 elif 2 <= st.session_state.page <= len(sections) + 1:
     section_index = st.session_state.page - 2
     section_name = list(sections.keys())[section_index]
-    
+
     # Progress Bar Calculation
     total_sections = len(sections)
     progress = (st.session_state.page - 1) / (total_sections + 1)  # +1 for the results page
@@ -132,15 +132,15 @@ elif 2 <= st.session_state.page <= len(sections) + 1:
 
     # Define Likert scale options with a blank default
     likert_scale = ["", "Never", "Rarely", "Sometimes", "Often", "Always"]
-    likert_scale_values = {option: i for i, option in enumerate(likert_scale) if option != ""}
+
+    # Initialize responses for the current section
+    if section_name not in st.session_state.user_responses:
+        st.session_state.user_responses[section_name] = [""] * len(sections[section_name])
 
     # Ask questions for the current section
-    for question in sections[section_name]:
-        response = st.selectbox(question, likert_scale, index=0, key=f"{section_name}_{question}")
-        if len(st.session_state.user_responses[section_name]) < len(sections[section_name]):
-            st.session_state.user_responses[section_name].append(response)
-        else:
-            st.session_state.user_responses[section_name][sections[section_name].index(question)] = response
+    for i, question in enumerate(sections[section_name]):
+        response = st.selectbox(question, likert_scale, index=0, key=f"{section_name}_{i}")
+        st.session_state.user_responses[section_name][i] = response  # Store response directly
 
     # Layout for Previous and Next buttons
     col1, col2 = st.columns([1, 1])
@@ -162,8 +162,9 @@ elif st.session_state.page == len(sections) + 2:
 
     # Calculate averages for each section
     averages = {}
+    likert_scale_values = {"Never": 1, "Rarely": 2, "Sometimes": 3, "Often": 4, "Always": 5}
     for section in sections:
-        responses = [likert_scale_values[resp] for resp in st.session_state.user_responses[section] if resp != ""]
+        responses = [likert_scale_values[resp] for resp in st.session_state.user_responses.get(section, []) if resp != ""]
         averages[section] = np.mean(responses) if responses else 0  # Prevent division by zero
 
     # Create radar chart
@@ -195,8 +196,4 @@ elif st.session_state.page == len(sections) + 2:
 
     # Brief explanation of the results
     st.header("Results Summary")
-    for section, average in averages.items():
-        st.write(f"**{section}:** Your average score is {average:.2f}. This indicates your current level of spiritual growth in this area.")
-
-    if st.button("Previous"):
-        prev_page()
+    for section, average
