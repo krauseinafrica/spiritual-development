@@ -22,8 +22,8 @@ def generate_interpretation(section_name, average_score):
     The section "{section_name}" in a spiritual growth assessment has an average score of {average_score} on a scale of 1-5, where 1 means "Never" and 5 means "Always." 
     Provide an interpretation of what this score means in terms of spiritual growth for the person and offer guidance on how they can improve in this area.
     """
-    response = openai.Completion.create(
-        model="text-davinci-003",
+    response = client.completions.create(
+        model="gpt-3.5-turbo-instruct",
         prompt=prompt,
         max_tokens=150,
         n=1,
