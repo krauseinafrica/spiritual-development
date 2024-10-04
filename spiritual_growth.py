@@ -1,10 +1,6 @@
 import streamlit as st
-import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
 # Set up session state to manage the current page
 if "page" not in st.session_state:
@@ -19,14 +15,7 @@ def prev_page():
     if st.session_state.page > 1:
         st.session_state.page -= 1
 
-# # Function to calculate average scores for each section
-# def calculate_averages(responses, sections):
-#     averages = {}
-#     for section in sections:
-#         averages[section] = np.mean(responses[section])
-#     return averages
-
-# Define the sections and questions
+# Update sections with new questions
 sections = {
     "Abide in Christ": [
         "I practice a regular quiet time and look forward to that time with Christ.",
@@ -112,7 +101,6 @@ if st.session_state.page == 1:
 
     st.header("User Information")
     st.session_state.name = st.text_input("Name (required)")
-    st.session_state.name = st.text_input("Email (required)")
     st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=18, step=1)
 
     if st.session_state.age < 18:
@@ -176,7 +164,7 @@ elif st.session_state.page == len(sections) + 2:
     averages = {}
     for section in sections:
         responses = [likert_scale_values[resp] for resp in st.session_state.user_responses[section] if resp != ""]
-        averages[section] = np.mean(responses)
+        averages[section] = np.mean(responses) if responses else 0  # Prevent division by zero
 
     # Create radar chart
     fig = go.Figure()
