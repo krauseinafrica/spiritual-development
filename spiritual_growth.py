@@ -133,6 +133,11 @@ if st.session_state.page == 1:
 elif 2 <= st.session_state.page <= len(sections) + 1:
     section_index = st.session_state.page - 2
     section_name = list(sections.keys())[section_index]
+    
+    # Progress Bar
+    progress = (st.session_state.page - 1) / len(sections) * 100
+    st.progress(progress)
+
     st.header(section_name)
 
     # Define Likert scale options with a blank default
@@ -147,14 +152,19 @@ elif 2 <= st.session_state.page <= len(sections) + 1:
         else:
             st.session_state.user_responses[section_name][sections[section_name].index(question)] = response
 
-    if st.button("Next"):
-        if any(response == "" for response in st.session_state.user_responses[section_name]):
-            st.error("Please answer all questions before proceeding.")
-        else:
-            next_page()
+    # Layout for Previous and Next buttons
+    col1, col2 = st.columns([1, 1])
 
-    if st.button("Previous"):
-        prev_page()
+    with col1:
+        if st.button("Previous"):
+            prev_page()
+
+    with col2:
+        if st.button("Next"):
+            if any(response == "" for response in st.session_state.user_responses[section_name]):
+                st.error("Please answer all questions before proceeding.")
+            else:
+                next_page()
 
 # Page for displaying results
 elif st.session_state.page == len(sections) + 2:
