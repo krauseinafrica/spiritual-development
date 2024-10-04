@@ -112,6 +112,7 @@ if st.session_state.page == 1:
 
     st.header("User Information")
     st.session_state.name = st.text_input("Name (required)")
+    st.session_state.name = st.text_input("Email (required)")
     st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=18, step=1)
 
     if st.session_state.age < 18:
