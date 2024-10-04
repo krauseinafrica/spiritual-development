@@ -7,7 +7,7 @@ from openai import OpenAI
 client = OpenAI(api_key = "<API_KEY>")
 
 # Set your OpenAI API key
-openai.api_key = st.secrets["openai"]["api_key"]
+# openai.api_key = st.secrets["openai"]["api_key"]
 
 # Functions to store and load values
 def store_value(key):
@@ -16,10 +16,12 @@ def store_value(key):
 # Create openai connection
 def generate_interpretation(section_name, average_score):
     prompt = f"""
+    You are a Christian spiritual leader that helps disciple people in their spiritual growth.
+    You are interpretting a spiritual growth assessment and helping people understand where they are doing well and where they have opporutnities to grow. 
     The section "{section_name}" in a spiritual growth assessment has an average score of {average_score} on a scale of 1-5, where 1 means "Never" and 5 means "Always." 
     Provide an interpretation of what this score means in terms of spiritual growth for the person and offer guidance on how they can improve in this area.
     """
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         engine="text-davinci-004",  # You can choose a different engine if needed
         prompt=prompt,
         max_tokens=150,
