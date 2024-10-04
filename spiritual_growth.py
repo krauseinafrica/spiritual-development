@@ -6,11 +6,6 @@ import plotly.graph_objects as go
 def store_value(key):
     st.session_state[key] = st.session_state["_" + key]
 
-def load_value(key):
-    if f"_{key}" not in st.session_state:
-        st.session_state[f"_{key}"] = None  # Initialize if not present
-    st.session_state["_" + key] = st.session_state[key]
-
 # Set up session state to manage the current page and user responses
 if "page" not in st.session_state:
     st.session_state.page = 1
@@ -51,19 +46,14 @@ if st.session_state.page == 1:
     st.title("Spiritual Growth Assessment")
 
     st.header("User Information")
-    load_value("name")
-    st.session_state.name = st.text_input("Name (required)", value=st.session_state.name, key="name")
+    st.session_state.name = st.text_input("Name (required)", value=st.session_state.name)
 
-    load_value("age")
-    st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=st.session_state.age, step=1, key="age")
+    st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=st.session_state.age, step=1)
 
     if st.session_state.age < 18:
         st.header("Parent Information")
-        load_value("parent_name")
-        st.session_state.parent_name = st.text_input("Parent's Name (required)", value=st.session_state.parent_name, key="parent_name")
-
-        load_value("parent_contact")
-        st.session_state.parent_contact = st.text_input("Parent's Contact Information (required)", value=st.session_state.parent_contact, key="parent_contact")
+        st.session_state.parent_name = st.text_input("Parent's Name (required)", value=st.session_state.parent_name)
+        st.session_state.parent_contact = st.text_input("Parent's Contact Information (required)", value=st.session_state.parent_contact)
 
     # Show the error message only when the user clicks the Next button
     if st.button("Next"):
@@ -73,10 +63,6 @@ if st.session_state.page == 1:
         elif st.session_state.age < 18 and (not st.session_state.parent_name or not st.session_state.parent_contact):
             st.error("Please enter both parent's name and contact information.")
         else:
-            store_value("name")
-            store_value("age")
-            store_value("parent_name")
-            store_value("parent_contact")
             st.session_state.page += 1  # Move to the next page
 
 # Pages for each section
@@ -101,8 +87,7 @@ elif 2 <= st.session_state.page <= len(sections) + 1:
     # Ask questions for the current section
     for i, question in enumerate(sections[section_name]):
         # Load the stored value for the question
-        load_value(f"{section_name}_{i}")
-        response = st.selectbox(question, likert_scale, index=likert_scale.index(st.session_state["_" + f"{section_name}_{i}"]), key=f"{section_name}_{i}")
+        response = st.selectbox(question, likert_scale, index=likert_scale.index(st.session_state.user_responses[section_name][i]), key=f"{section_name}_{i}")
         st.session_state.user_responses[section_name][i] = response  # Store response directly
 
     # Layout for Previous and Next buttons
@@ -113,12 +98,10 @@ elif 2 <= st.session_state.page <= len(sections) + 1:
             st.session_state.page -= 1
 
     with col2:
-        if st.button("Next"):
+        if st.button("Next",align='right'):
             if any(response == "" for response in st.session_state.user_responses[section_name]):
                 st.error("Please answer all questions before proceeding.")
             else:
-                for i in range(len(sections[section_name])):
-                    store_value(f"{section_name}_{i}")  # Store each response
                 st.session_state.page += 1  # Move to the next page
 
 # Page for displaying results
