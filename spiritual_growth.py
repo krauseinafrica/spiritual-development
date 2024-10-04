@@ -119,7 +119,9 @@ if st.session_state.page == 1:
         st.session_state.parent_name = st.text_input("Parent's Name (required)")
         st.session_state.parent_contact = st.text_input("Parent's Contact Information (required)")
 
+    # Only show the error message when the user clicks the Next button
     if st.button("Next"):
+        # Validate user input
         if not st.session_state.name:
             st.error("Please enter your name.")
         elif st.session_state.age < 18 and (not st.session_state.parent_name or not st.session_state.parent_contact):
