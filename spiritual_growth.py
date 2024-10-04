@@ -98,7 +98,7 @@ elif 2 <= st.session_state.page <= len(sections) + 1:
             st.session_state.page -= 1
 
     with col2:
-        if st.button("Next",align='right'):
+        if st.button("Next"):
             if any(response == "" for response in st.session_state.user_responses[section_name]):
                 st.error("Please answer all questions before proceeding.")
             else:
