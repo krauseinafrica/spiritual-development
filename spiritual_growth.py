@@ -19,10 +19,10 @@ def generate_interpretation(section_name, average_score):
     prompt = f"""
     I am a Christian filling out a Spiritual Growth assessment and need help interpretting the results from a spiritual mentor.
     Please help interpret the results of each section in the spiritual growth assessment and highlight where they are doing well and where they have opporutnities to grow based on their answers to questions in each section. 
-    Review questions that scored the lowest in each section to help recommend next steps. 
-    Also highlight areas they seem to be doing well to encourage them.
+    Review questions that scored the lowest in each section to help recommend next steps. Keep suggestions to one sentence and add scripture references from the Bible for guidance if applicable.
+    Also highlight areas they seem to be doing well to encourage them with one sentence highlight questions they scored higher on, if applicable.
     Respond as if you are talking to the person filling out the form. 
-    Use markdown to title each section's response with the section name
+    # Use markdown to title each section's response with the section name
     The section "{section_name}" in a spiritual growth assessment has an average score of {average_score} on a scale of 1-5, where 1 means "Never" and 5 means "Always." 
     Provide the person filling out the form an interpretation of what this score means in terms of spiritual growth for the person and offer guidance on how they can improve in this area.
     """
@@ -68,67 +68,67 @@ sections = {
         "Peace, contentment, and joy characterize my life rather than worry and anxiety.",
         "I trust Christ to help me through any problem or crisis I face.",
         "I remain confident of God’s love and provision during difficult times."
-    ]#,
-    # "Live in the Word": [
-    #     "I regularly read and study my Bible.",
-    #     "I believe the Bible is God’s Word and provides His instructions for life.",
-    #     "I evaluate cultural ideas and lifestyles by biblical standards.",
-    #     "I can answer questions about life and faith from a biblical perspective.",
-    #     "I replace impure or inappropriate thoughts with God’s truth.",
-    #     "I demonstrate honesty in my actions and conversation.",
-    #     "When the Bible exposes an area of my life needing change, I respond to make things right.",
-    #     "Generally, my public and private self are the same",
-    #     "I use the Bible as the guide for the way I think and act.",
-    #     "I study the Bible for the purpose of discovering truth for daily living."
-    # ],
-    # "Pray in Faith": [
-    #     "My prayers focus on discovering God’s will more than expressing my needs.",
-    #     "I trust God to answer when I pray and wait patiently on His timing.",
-    #     "My prayers include thanksgiving, praise, confession, and requests.",
-    #     "I expect to grow in my prayer life and intentionally seek help to improve.",
-    #     "I spend as much time listening to God as talking to Him.",
-    #     "I pray because I am aware of my complete dependence on God for everything in my life.",
-    #     "Regular participation in group prayer characterizes my prayer life.",
-    #     "I maintain an attitude of prayer throughout each day.",
-    #     "I believe my prayers impact my life and the lives of others.",
-    #     "I engage in a daily prayer time."
-    # ],
-    # "Fellowship with Believers": [
-    #     "I forgive others when their actions harm me.",
-    #     "I admit my errors in relationships and humbly seek forgiveness from the one I’ve hurt.",
-    #     "I allow other Christians to hold me accountable for spiritual growth.",
-    #     "I seek to live in harmony with other members of my family.",
-    #     "I place the interest of others above my self-interest.",
-    #     "I am gentle and kind in my interactions with others.",
-    #     "I encourage and listen to feedback from others to help me discover areas for relationship growth.",
-    #     "I show patience in my relationships with family and friends.",
-    #     "I encourage others by pointing out their strengths rather than criticizing their weaknesses.",
-    #     "My time commitments demonstrate that I value relationships over work/career/hobbies."
-    # ],
-    # "Witness to the World": [
-    #     "I share my faith in Christ with non-believers.",
-    #     "I regularly pray for non-believers I know.",
-    #     "I make my faith known to my neighbors and/or fellow employees.",
-    #     "I intentionally maintain relationships with non-believers in order to share my testimony.",
-    #     "When confronted about my faith, I remain consistent and firm in my testimony.",
-    #     "I help others understand how to effectively share a personal testimony.",
-    #     "I make sure the people I witness to get the follow-up and support needed to grow in Christ.",
-    #     "I encourage my church and friends to support mission efforts.",
-    #     "I am prepared to share my testimony at any time.",
-    #     "My actions demonstrate a belief in and commitment to the Great Commission (Matthew 28:19-20)."
-    # ],
-    # "Minister to Others": [
-    #     "I understand my spiritual gifts and use those gifts to serve others.",
-    #     "I serve others expecting nothing in return.",
-    #     "I sacrificially contribute my finances/resources to help others in my church and community.",
-    #     "I go out of my way to show love to people I meet.",
-    #     "Meeting the needs of others provides a sense of purpose in my life.",
-    #     "I share biblical truth with those I serve as God gives opportunity.",
-    #     "I act as if other’s needs are as important as my own.",
-    #     "I expect God to use me every day in His kingdom work.",
-    #     "I regularly contribute time to a ministry at my church.",
-    #     "I help others identify ministry gifts and become involved in ministry."
-    # ]
+    ],
+    "Live in the Word": [
+        "I regularly read and study my Bible.",
+        "I believe the Bible is God’s Word and provides His instructions for life.",
+        "I evaluate cultural ideas and lifestyles by biblical standards.",
+        "I can answer questions about life and faith from a biblical perspective.",
+        "I replace impure or inappropriate thoughts with God’s truth.",
+        "I demonstrate honesty in my actions and conversation.",
+        "When the Bible exposes an area of my life needing change, I respond to make things right.",
+        "Generally, my public and private self are the same",
+        "I use the Bible as the guide for the way I think and act.",
+        "I study the Bible for the purpose of discovering truth for daily living."
+    ],
+    "Pray in Faith": [
+        "My prayers focus on discovering God’s will more than expressing my needs.",
+        "I trust God to answer when I pray and wait patiently on His timing.",
+        "My prayers include thanksgiving, praise, confession, and requests.",
+        "I expect to grow in my prayer life and intentionally seek help to improve.",
+        "I spend as much time listening to God as talking to Him.",
+        "I pray because I am aware of my complete dependence on God for everything in my life.",
+        "Regular participation in group prayer characterizes my prayer life.",
+        "I maintain an attitude of prayer throughout each day.",
+        "I believe my prayers impact my life and the lives of others.",
+        "I engage in a daily prayer time."
+    ],
+    "Fellowship with Believers": [
+        "I forgive others when their actions harm me.",
+        "I admit my errors in relationships and humbly seek forgiveness from the one I’ve hurt.",
+        "I allow other Christians to hold me accountable for spiritual growth.",
+        "I seek to live in harmony with other members of my family.",
+        "I place the interest of others above my self-interest.",
+        "I am gentle and kind in my interactions with others.",
+        "I encourage and listen to feedback from others to help me discover areas for relationship growth.",
+        "I show patience in my relationships with family and friends.",
+        "I encourage others by pointing out their strengths rather than criticizing their weaknesses.",
+        "My time commitments demonstrate that I value relationships over work/career/hobbies."
+    ],
+    "Witness to the World": [
+        "I share my faith in Christ with non-believers.",
+        "I regularly pray for non-believers I know.",
+        "I make my faith known to my neighbors and/or fellow employees.",
+        "I intentionally maintain relationships with non-believers in order to share my testimony.",
+        "When confronted about my faith, I remain consistent and firm in my testimony.",
+        "I help others understand how to effectively share a personal testimony.",
+        "I make sure the people I witness to get the follow-up and support needed to grow in Christ.",
+        "I encourage my church and friends to support mission efforts.",
+        "I am prepared to share my testimony at any time.",
+        "My actions demonstrate a belief in and commitment to the Great Commission (Matthew 28:19-20)."
+    ],
+    "Minister to Others": [
+        "I understand my spiritual gifts and use those gifts to serve others.",
+        "I serve others expecting nothing in return.",
+        "I sacrificially contribute my finances/resources to help others in my church and community.",
+        "I go out of my way to show love to people I meet.",
+        "Meeting the needs of others provides a sense of purpose in my life.",
+        "I share biblical truth with those I serve as God gives opportunity.",
+        "I act as if other’s needs are as important as my own.",
+        "I expect God to use me every day in His kingdom work.",
+        "I regularly contribute time to a ministry at my church.",
+        "I help others identify ministry gifts and become involved in ministry."
+    ]
 }
 
 # Page 1: User Information
