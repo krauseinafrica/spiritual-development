@@ -19,6 +19,7 @@ def generate_interpretation(section_name, average_score):
     prompt = f"""
     I am a Christian filling out a Spiritual Growth assessment and need help interpretting the results from a spiritual mentor.
     Please help interpret the results of each section in the spiritual growth assessment and highlight where they are doing well and where they have opporutnities to grow based on their answers to questions in each section. 
+    Provide a sentence explaining what each section is measuring based on a summary of the questions asked. 
     Review questions that scored the lowest in each section to help recommend next steps. Keep suggestions to one sentence and add scripture references from the Bible for guidance if applicable.
     Also highlight areas they seem to be doing well to encourage them with one sentence highlight questions they scored higher on, if applicable.
     Respond as if you are talking to the person filling out the form. 
