@@ -15,9 +15,19 @@ def load_value(key):
 if "page" not in st.session_state:
     st.session_state.page = 1
 
-# Initialize user responses dictionary in session state
+# Initialize user responses and personal info dictionary in session state
 if "user_responses" not in st.session_state:
     st.session_state.user_responses = {}
+
+# Initialize personal info keys in session state
+if "name" not in st.session_state:
+    st.session_state.name = ""
+if "age" not in st.session_state:
+    st.session_state.age = 18  # Default age
+if "parent_name" not in st.session_state:
+    st.session_state.parent_name = ""
+if "parent_contact" not in st.session_state:
+    st.session_state.parent_contact = ""
 
 # Update sections with new questions
 sections = {
@@ -42,18 +52,18 @@ if st.session_state.page == 1:
 
     st.header("User Information")
     load_value("name")
-    st.session_state.name = st.text_input("Name (required)", value=st.session_state.get("name", ""), key="name")
+    st.session_state.name = st.text_input("Name (required)", value=st.session_state.name, key="name")
 
     load_value("age")
-    st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=st.session_state.get("age", 18), step=1, key="age")
+    st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=st.session_state.age, step=1, key="age")
 
     if st.session_state.age < 18:
         st.header("Parent Information")
         load_value("parent_name")
-        st.session_state.parent_name = st.text_input("Parent's Name (required)", value=st.session_state.get("parent_name", ""), key="parent_name")
+        st.session_state.parent_name = st.text_input("Parent's Name (required)", value=st.session_state.parent_name, key="parent_name")
 
         load_value("parent_contact")
-        st.session_state.parent_contact = st.text_input("Parent's Contact Information (required)", value=st.session_state.get("parent_contact", ""), key="parent_contact")
+        st.session_state.parent_contact = st.text_input("Parent's Contact Information (required)", value=st.session_state.parent_contact, key="parent_contact")
 
     # Show the error message only when the user clicks the Next button
     if st.button("Next"):
