@@ -17,10 +17,14 @@ def store_value(key):
 # Create openai connection
 def generate_interpretation(section_name, average_score):
     prompt = f"""
-    You are a Christian spiritual leader that helps disciple people in their spiritual growth.
-    You are interpretting a spiritual growth assessment and helping people understand where they are doing well and where they have opporutnities to grow. 
+    I am a Christian filling out a Spiritual Growth assessment and need help interpretting the results from a spiritual mentor.
+    Please help interpret the results of each section in the spiritual growth assessment and highlight where they are doing well and where they have opporutnities to grow based on their answers to questions in each section. 
+    Review questions that scored the lowest in each section to help recommend next steps. 
+    Also highlight areas they seem to be doing well to encourage them.
+    Respond as if you are talking to the person filling out the form. 
+    Use markdown to title each section's response with the section name
     The section "{section_name}" in a spiritual growth assessment has an average score of {average_score} on a scale of 1-5, where 1 means "Never" and 5 means "Always." 
-    Provide an interpretation of what this score means in terms of spiritual growth for the person and offer guidance on how they can improve in this area.
+    Provide the person filling out the form an interpretation of what this score means in terms of spiritual growth for the person and offer guidance on how they can improve in this area.
     """
     response = client.completions.create(
         model="gpt-3.5-turbo-instruct",
