@@ -6,6 +6,18 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+# Set up session state to manage the current page
+if "page" not in st.session_state:
+    st.session_state.page = 1
+
+# Function to navigate to the next page
+def next_page():
+    st.session_state.page += 1
+
+# Function to navigate to the previous page (if needed)
+def prev_page():
+    if st.session_state.page > 1:
+        st.session_state.page -= 1
 
 # Function to calculate average scores for each section
 def calculate_averages(responses, sections):
@@ -90,118 +102,99 @@ sections = {
     ]
 }
 
-# Initialize user responses dictionary
-user_responses = {section: [] for section in sections}
+# Initialize user responses dictionary in session state
+if "user_responses" not in st.session_state:
+    st.session_state.user_responses = {section: [] for section in sections}
 
-st.title("Spiritual Growth Assessment")
+# Page 1: User Information
+if st.session_state.page == 1:
+    st.title("Spiritual Growth Assessment")
 
-# User Information
-st.header("User Information")
-name = st.text_input("Name (required)")
-email_address = st.text_input("E-mail (required)")
-age = st.number_input("Age (required)", min_value=0, max_value=120, value=18, step=1)
+    st.header("User Information")
+    st.session_state.name = st.text_input("Name (required)")
+    st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=18, step=1)
 
-parent_name = None
-parent_contact = None
-if age < 18:
-    st.header("Parent Information")
-    parent_name = st.text_input("Parent's Name (required)")
-    parent_contact = st.text_input("Parent's Contact Information (required)")
+    if st.session_state.age < 18:
+        st.header("Parent Information")
+        st.session_state.parent_name = st.text_input("Parent's Name (required)")
+        st.session_state.parent_contact = st.text_input("Parent's Contact Information (required)")
 
-# Define Likert scale options with a blank default
-likert_scale = ["", "Never", "Rarely", "Sometimes", "Often", "Always"]
-likert_scale_values = {option: i for i, option in enumerate(likert_scale) if option != ""}
-
-# Walk through each section and ask questions
-for section, questions in sections.items():
-    st.header(section)
-    for question in questions:
-        response = st.selectbox(question, likert_scale, index=0, key=f"{section}_{question}")
-        if response == "":
-            user_responses[section].append(None)  # Use None for blank response
+    if st.button("Next"):
+        if not st.session_state.name:
+            st.error("Please enter your name.")
+        elif st.session_state.age < 18 and (not st.session_state.parent_name or not st.session_state.parent_contact):
+            st.error("Please enter both parent's name and contact information.")
         else:
-            user_responses[section].append(likert_scale_values[response])
+            next_page()
 
-# Validate required fields before calculating and displaying results
-if st.button("Submit"):
-    # Check if required fields are filled
-    if not name:
-        st.error("Please enter your name.")
-    elif age < 18 and (not parent_name or not parent_contact):
-        st.error("Please enter both parent's name and contact information.")
-    elif any(None in answers for answers in user_responses.values()):
-        st.error("Please answer all questions before submitting the form.")
-    else:
-        averages = calculate_averages(user_responses, sections)
+# Pages for each section
+elif 2 <= st.session_state.page <= len(sections) + 1:
+    section_index = st.session_state.page - 2
+    section_name = list(sections.keys())[section_index]
+    st.header(section_name)
 
-        # Create radar chart
-        fig = go.Figure()
+    # Define Likert scale options with a blank default
+    likert_scale = ["", "Never", "Rarely", "Sometimes", "Often", "Always"]
+    likert_scale_values = {option: i for i, option in enumerate(likert_scale) if option != ""}
 
-        categories = list(averages.keys())
-        values = list(averages.values())
-        values += values[:1]  # Close the radar chart loop
-
-        categories += categories[:1]
-
-        fig.add_trace(go.Scatterpolar(
-            r=values,
-            theta=categories,
-            fill='toself',
-            name='Spiritual Growth Assessment'
-        ))
-
-        fig.update_layout(
-            polar=dict(
-                radialaxis=dict(
-                    visible=True,
-                    range=[0, 5]
-                )),
-            showlegend=False
-        )
-
-        st.plotly_chart(fig)
-
-        # Brief explanation of the results
-        st.header("Results Summary")
-        for section, average in averages.items():
-            st.write(f"**{section}:** Your average score is {average:.2f}. This indicates your current level of spiritual growth in this area.")
-
-def send_email(recipient_email, subject, body):
-    try:
-        # Replace these with your email settings
-        sender_email = "youremail@example.com"
-        sender_password = "yourpassword"
-
-        # Create the email message
-        message = MIMEMultipart()
-        message['From'] = sender_email
-        message['To'] = recipient_email
-        message['Subject'] = subject
-
-        message.attach(MIMEText(body, 'plain'))
-
-        # Set up the SMTP server
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(sender_email, sender_password)
-        server.send_message(message)
-        server.quit()
-
-        return True
-    except Exception as e:
-        print(f"Failed to send email: {e}")
-        return False
-
-# Email functionality in Streamlit
-if st.button("Email Results"):
-    if email_address:
-        subject = "Your Spiritual Growth Assessment Results"
-        body = "Here are your assessment results:\n\n" + str(averages)
-        if send_email(email_address, subject, body):
-            st.success("Results emailed successfully.")
+    # Ask questions for the current section
+    for question in sections[section_name]:
+        response = st.selectbox(question, likert_scale, index=0, key=f"{section_name}_{question}")
+        if len(st.session_state.user_responses[section_name]) < len(sections[section_name]):
+            st.session_state.user_responses[section_name].append(response)
         else:
-            st.error("Failed to send email.")
-    else:
-        st.error("Please enter an email address.")
+            st.session_state.user_responses[section_name][sections[section_name].index(question)] = response
 
-        
+    if st.button("Next"):
+        if any(response == "" for response in st.session_state.user_responses[section_name]):
+            st.error("Please answer all questions before proceeding.")
+        else:
+            next_page()
+
+    if st.button("Previous"):
+        prev_page()
+
+# Page for displaying results
+elif st.session_state.page == len(sections) + 2:
+    st.header("Results")
+
+    # Calculate averages for each section
+    averages = {}
+    for section in sections:
+        responses = [likert_scale_values[resp] for resp in st.session_state.user_responses[section] if resp != ""]
+        averages[section] = np.mean(responses)
+
+    # Create radar chart
+    fig = go.Figure()
+
+    categories = list(averages.keys())
+    values = list(averages.values())
+    values += values[:1]  # Close the radar chart loop
+
+    categories += categories[:1]
+
+    fig.add_trace(go.Scatterpolar(
+        r=values,
+        theta=categories,
+        fill='toself',
+        name='Spiritual Growth Assessment'
+    ))
+
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[0, 5]
+            )),
+        showlegend=False
+    )
+
+    st.plotly_chart(fig)
+
+    # Brief explanation of the results
+    st.header("Results Summary")
+    for section, average in averages.items():
+        st.write(f"**{section}:** Your average score is {average:.2f}. This indicates your current level of spiritual growth in this area.")
+
+    if st.button("Previous"):
+        prev_page()
