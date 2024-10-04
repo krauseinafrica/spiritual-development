@@ -16,13 +16,13 @@ def store_value(key):
     
 # Create openai connection
 def generate_interpretation(section_name, average_score):
+    response = openai.completions.create( # Changed
     prompt = f"""
     You are a Christian spiritual leader that helps disciple people in their spiritual growth.
     You are interpretting a spiritual growth assessment and helping people understand where they are doing well and where they have opporutnities to grow. 
     The section "{section_name}" in a spiritual growth assessment has an average score of {average_score} on a scale of 1-5, where 1 means "Never" and 5 means "Always." 
     Provide an interpretation of what this score means in terms of spiritual growth for the person and offer guidance on how they can improve in this area.
     """
-    response = openai.completions.create( # Changed
     model="gpt-3.5-turbo-instruct", # Changed
         messages=[
             {"role": "system", "content": "You are an expert in providing spiritual guidance based on assessment scores."},
