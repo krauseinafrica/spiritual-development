@@ -134,8 +134,9 @@ elif 2 <= st.session_state.page <= len(sections) + 1:
     section_index = st.session_state.page - 2
     section_name = list(sections.keys())[section_index]
     
-    # Progress Bar
-    progress = (st.session_state.page - 1) / len(sections) * 100
+    # Progress Bar Calculation
+    total_sections = len(sections)
+    progress = (st.session_state.page - 1) / (total_sections + 1)  # +1 for the results page
     st.progress(progress)
 
     st.header(section_name)
