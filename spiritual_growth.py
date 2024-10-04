@@ -5,10 +5,10 @@ import openai
 from openai import OpenAI
 
 # client = OpenAI(api_key = "<API_KEY>")
-client = st.secrets["openai"]["API_KEY"]
+# client = st.secrets["openai"]["API_KEY"]
 
 # Set your OpenAI API key
-# openai.api_key = st.secrets["openai"]["api_key"]
+openai.api_key = st.secrets["openai"]["api_key"]
 
 # Functions to store and load values
 def store_value(key):
@@ -22,8 +22,8 @@ def generate_interpretation(section_name, average_score):
     The section "{section_name}" in a spiritual growth assessment has an average score of {average_score} on a scale of 1-5, where 1 means "Never" and 5 means "Always." 
     Provide an interpretation of what this score means in terms of spiritual growth for the person and offer guidance on how they can improve in this area.
     """
-    response = client.completions.create(
-        model="gpt-4",
+    response = openai.completions.create( # Changed
+    model="gpt-3.5-turbo-instruct", # Changed
         messages=[
             {"role": "system", "content": "You are an expert in providing spiritual guidance based on assessment scores."},
             {"role": "user", "content": prompt}
