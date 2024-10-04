@@ -19,30 +19,13 @@ def generate_interpretation(section_name, average_score):
     The section "{section_name}" in a spiritual growth assessment has an average score of {average_score} on a scale of 1-5, where 1 means "Never" and 5 means "Always." 
     Provide an interpretation of what this score means in terms of spiritual growth for the person and offer guidance on how they can improve in this area.
     """
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": "You are an expert in providing spiritual guidance based on assessment scores."},
-            {"role": "user", "content": prompt}
-        ],
+    response = openai.Completion.create(
+        engine="text-davinci-004",  # You can choose a different engine if needed
+        prompt=prompt,
         max_tokens=150,
         temperature=0.7
     )
-    return response['choices'][0]['message']['content'].strip()
-
-# Example usage on the results page
-if st.session_state.page == len(sections) + 2:
-    st.header("Results")
-
-    # Assuming `averages` is a dictionary with section names as keys and average scores as values
-    for section, average in averages.items():
-        st.write(f"{section}: {average:.2f}")
-        
-        # Generate interpretation using OpenAI and display
-        with st.spinner(f"Interpreting your results for '{section}'..."):
-            interpretation = generate_interpretation(section, average)
-        
-        st.write(interpretation)
+    return response.choices[0].text.strip()
 
 # Set up session state to manage the current page and user responses
 if "page" not in st.session_state:
