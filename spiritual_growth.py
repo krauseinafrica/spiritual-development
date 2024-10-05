@@ -9,6 +9,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import matplotlib.pyplot as plt
 import io
+import os
+
 
 # client = OpenAI(api_key = "<API_KEY>")
 # client = st.secrets["openai"]["API_KEY"]
