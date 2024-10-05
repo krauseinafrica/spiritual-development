@@ -13,51 +13,6 @@ client = OpenAI(api_key = st.secrets["openai"]["API_KEY"])
 # Functions to store and load values
 def store_value(key):
     st.session_state[key] = st.session_state["_" + key]
-
-section_descriptions = {
-    "Abide in Christ": """### **1. Abide in Christ**  
-**Summary:**  
-Abiding in Christ means nurturing a close relationship with Him, allowing His presence to guide your life. It involves trusting His love and seeking His will in all aspects of life. As you draw near to Christ, you will experience transformation and spiritual growth.  
-**Scripture Reference:**  
-*"I am the vine; you are the branches. Whoever abides in me and I in him, he it is that bears much fruit, for apart from me you can do nothing."* — John 15:5""",
-
-    "Live in the Word": """### **2. Live in the Word**  
-**Summary:**  
-Living in the Word emphasizes the importance of engaging with Scripture regularly. The Bible provides guidance, wisdom, and truth that shape your beliefs and actions. By studying God’s Word, you equip yourself to navigate life's challenges and grow in your faith.  
-**Scripture Reference:**  
-*"Your word is a lamp to my feet and a light to my path."* — Psalm 119:105""",
-
-    "Pray in Faith": """### **3. Pray in Faith**  
-**Summary:**  
-Prayer is vital for developing a strong relationship with God. It allows you to communicate with Him, express your needs, and seek His guidance. Praying in faith strengthens your trust in God and deepens your understanding of His will for your life.  
-**Scripture Reference:**  
-*"And whatever you ask in prayer, you will receive, if you have faith."* — Matthew 21:22""",
-
-    "Fellowship with Believers": """### **4. Fellowship with Believers**  
-**Summary:**  
-Fellowship with other believers fosters community and accountability in your spiritual journey. By encouraging one another, sharing burdens, and building meaningful relationships, you grow together in faith and reflect Christ's love to the world.  
-**Scripture Reference:**  
-*"And let us consider how to stir up one another to love and good works, not neglecting to meet together, as is the habit of some, but encouraging one another."* — Hebrews 10:24-25""",
-
-    "Witness to the World": """### **5. Witness to the World**  
-**Summary:**  
-Being a witness to the world involves sharing your faith with others. By living out your beliefs and communicating the message of Christ, you can impact the lives of those around you and fulfill the Great Commission to spread the Gospel.  
-**Scripture Reference:**  
-*"Go therefore and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit."* — Matthew 28:19""",
-
-    "Minister to Others": """### **6. Minister to Others**  
-**Summary:**  
-Ministering to others is an expression of Christ's love in action. By serving those in need and using your spiritual gifts, you reflect God’s compassion and contribute to the well-being of your community. Your acts of service can lead others to experience God's love firsthand.  
-**Scripture Reference:**  
-*"For even the Son of Man came not to be served but to serve, and to give his life as a ransom for many."* — Mark 10:45""",
-}
-
-# Initialize session state variables if not already done
-if 'page' not in st.session_state:
-    st.session_state.page = 0
-if 'responses' not in st.session_state:
-    st.session_state.responses = {section: {} for section in section_descriptions.keys()}
-
     
 # Create openai connection
 def generate_interpretation(section_name, average_score):
@@ -176,57 +131,69 @@ sections = {
         "I assist others in discovering their gifts and getting involved in serving."
     ]
 }
-# Initialize user responses dictionary in session state
-if "user_responses" not in st.session_state:
-    st.session_state.user_responses = {section: [] for section in sections}
 
 # Page 1: User Information
 if st.session_state.page == 1:
     st.title("Spiritual Growth Assessment")
 
     st.header("User Information")
-    st.session_state.name = st.text_input("Name (required)")
-    st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=18, step=1)
+    st.session_state.name = st.text_input("Name (required)", value=st.session_state.name)
+
+    st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=st.session_state.age, step=1)
 
     if st.session_state.age < 18:
         st.header("Parent Information")
-        st.session_state.parent_name = st.text_input("Parent's Name (required)")
-        st.session_state.parent_contact = st.text_input("Parent's Contact Information (required)")
+        st.session_state.parent_name = st.text_input("Parent's Name (required)", value=st.session_state.parent_name)
+        st.session_state.parent_contact = st.text_input("Parent's Contact Information (required)", value=st.session_state.parent_contact)
 
+    # Show the error message only when the user clicks the Next button
     if st.button("Next"):
+        # Validate user input
         if not st.session_state.name:
             st.error("Please enter your name.")
         elif st.session_state.age < 18 and (not st.session_state.parent_name or not st.session_state.parent_contact):
             st.error("Please enter both parent's name and contact information.")
         else:
-            next_page()
+            st.session_state.page += 1  # Move to the next page
 
 # Pages for each section
 elif 2 <= st.session_state.page <= len(sections) + 1:
     section_index = st.session_state.page - 2
     section_name = list(sections.keys())[section_index]
+
+    # Progress Bar Calculation
+    total_sections = len(sections)
+    progress = (st.session_state.page - 1) / (total_sections + 1)  # +1 for the results page
+    st.progress(progress)
+
     st.header(section_name)
 
     # Define Likert scale options with a blank default
     likert_scale = ["", "Never", "Rarely", "Sometimes", "Often", "Always"]
-    likert_scale_values = {option: i for i, option in enumerate(likert_scale) if option != ""}
+
+    # Initialize responses for the current section
+    if section_name not in st.session_state.user_responses:
+        st.session_state.user_responses[section_name] = [""] * len(sections[section_name])
 
     # Ask questions for the current section
-    for question in sections[section_name]:
-        response = st.selectbox(question, likert_scale, index=0, key=f"{section_name}_{question}")
-        if len(st.session_state.user_responses[section_name]) < len(sections[section_name]):
-            st.session_state.user_responses[section_name].append(response)
-        else:
-            st.session_state.user_responses[section_name][sections[section_name].index(question)] = response
+    for i, question in enumerate(sections[section_name]):
+        # Load the stored value for the question
+        response = st.selectbox(question, likert_scale, index=likert_scale.index(st.session_state.user_responses[section_name][i]), key=f"{section_name}_{i}")
+        st.session_state.user_responses[section_name][i] = response  # Store response directly
 
-    if st.button("Next"):
-        if any(response == "" for response in st.session_state.user_responses[section_name]):
-            st.error("Please answer all questions before proceeding.")
-        else:
-            next_page()
+    # Layout for Previous and Next buttons
+    col1, col2 = st.columns([1, 1])
 
-    if st.button("Previous"):
-        prev_page()
+    with col1:
+        if st.button("Previous"):
+            st.session_state.page -= 1
+
+    with col2:
+        if st.button("Next"):
+            if any(response == "" for response in st.session_state.user_responses[section_name]):
+                st.error("Please answer all questions before proceeding.")
+            else:
+                st.session_state.page += 1  # Move to the next page
 
 # Page for displaying results
 elif st.session_state.page == len(sections) + 2:
