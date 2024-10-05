@@ -1,12 +1,9 @@
 import streamlit as st
 import numpy as np
+import tempfile
 import plotly.graph_objects as go
 import openai
 from openai import OpenAI
-# Email Resources
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 import matplotlib.pyplot as plt
 import io
 import os
@@ -74,6 +71,11 @@ def generate_interpretation(section_name, average_score):
     return response.choices[0].text.strip()
 
 def create_pdf(averages, fig):
+    # Create a temporary file to save the radar chart image
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_img:
+        img_path = temp_img.name
+        fig.write_image(img_path)  # Save the figure as a PNG
+
     # Create a PDF buffer
     buffer = io.BytesIO()
     p = canvas.Canvas(buffer, pagesize=letter)
@@ -90,14 +92,18 @@ def create_pdf(averages, fig):
         y_position -= 20  # Move down for next line
 
     # Add Radar Chart as Image
-    img_buf = io.BytesIO(fig.to_image(format="png"))  # Get image of the figure
-    p.drawImage(img_buf, 50, y_position, width=500, height=300)  # Adjust position and size as needed
+    p.drawImage(img_path, 50, y_position, width=500, height=300)  # Adjust position and size as needed
 
     p.showPage()
     p.save()
+    
+    # Clean up the temporary image file
+    os.remove(img_path)
+
     buffer.seek(0)
     return buffer.getvalue()
 
+    
 # Set up session state to manage the current page and user responses
 if "page" not in st.session_state:
     st.session_state.page = 1
