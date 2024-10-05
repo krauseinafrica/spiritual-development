@@ -73,6 +73,30 @@ def generate_interpretation(section_name, average_score):
     )
     return response.choices[0].text.strip()
 
+def create_pdf(averages, fig):
+    # Create a PDF buffer
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer, pagesize=letter)
+
+    # Add Title
+    p.setFont("Helvetica-Bold", 20)
+    p.drawString(100, 750, "Spiritual Growth Assessment Results")
+
+    # Add Summary
+    p.setFont("Helvetica", 12)
+    y_position = 700
+    for section, average in averages.items():
+        p.drawString(100, y_position, f"{section}: {average:.2f}")
+        y_position -= 20  # Move down for next line
+
+    # Add Radar Chart as Image
+    img_buf = io.BytesIO(fig.to_image(format="png"))  # Get image of the figure
+    p.drawImage(img_buf, 50, y_position, width=500, height=300)  # Adjust position and size as needed
+
+    p.showPage()
+    p.save()
+    buffer.seek(0)
+    return buffer.getvalue()
 
 # Set up session state to manage the current page and user responses
 if "page" not in st.session_state:
@@ -319,27 +343,4 @@ elif st.session_state.page == len(sections) + 2:
             mime="application/pdf"
         )
 
-def create_pdf(averages, fig):
-    # Create a PDF buffer
-    buffer = io.BytesIO()
-    p = canvas.Canvas(buffer, pagesize=letter)
 
-    # Add Title
-    p.setFont("Helvetica-Bold", 20)
-    p.drawString(100, 750, "Spiritual Growth Assessment Results")
-
-    # Add Summary
-    p.setFont("Helvetica", 12)
-    y_position = 700
-    for section, average in averages.items():
-        p.drawString(100, y_position, f"{section}: {average:.2f}")
-        y_position -= 20  # Move down for next line
-
-    # Add Radar Chart as Image
-    img_buf = io.BytesIO(fig.to_image(format="png"))  # Get image of the figure
-    p.drawImage(img_buf, 50, y_position, width=500, height=300)  # Adjust position and size as needed
-
-    p.showPage()
-    p.save()
-    buffer.seek(0)
-    return buffer.getvalue()
