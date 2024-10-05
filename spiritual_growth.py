@@ -75,8 +75,6 @@ if "user_responses" not in st.session_state:
 # Initialize personal info keys in session state
 if "name" not in st.session_state:
     st.session_state.name = ""
-if "email" not in st.session_state:
-    st.session_state.email = ""
 if "age" not in st.session_state:
     st.session_state.age = 18  # Default age
 if "parent_name" not in st.session_state:
@@ -167,7 +165,6 @@ if st.session_state.page == 1:
     st.header("User Information")
     st.write("Please fill in your personal information below. Include your parent's information (if applicable). We will be adding in the ability to email the results to yourself and share with others in a future version. ")
     st.session_state.name = st.text_input("Name (required)", value=st.session_state.name)
-    st.session_state.email = st.text_input("Email (required)", value=st.session_state.email)
     st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=st.session_state.age, step=1)
 
     if st.session_state.age < 18:
@@ -287,3 +284,19 @@ elif st.session_state.page == len(sections) + 2:
             interpretation = generate_interpretation(section, average)
         
         st.write(interpretation)
+
+
+    # Collect email addresses
+    st.header("Email Your Results")
+    user_email = st.text_input("Your Email (required)")
+    additional_emails = st.text_input("Additional Emails (comma-separated)")
+
+    if st.button("Send Results"):
+        # Validate email input
+        if not user_email:
+            st.error("Please enter your email address.")
+        else:
+            # Call the email function to send results
+            send_results_email(user_email, additional_emails, fig, averages)
+            st.success("Results emailed successfully!")
+
