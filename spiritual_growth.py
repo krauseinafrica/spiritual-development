@@ -117,55 +117,55 @@ sections = {
         "I try to be the same person in public and private.",
         "I use the Bible as the guide for the way I think and act.",
         "I study the Bible for the purpose of discovering truth for daily living."
-    ],
-    "Pray in Faith": [
-        "When I pray, I focus more on finding out what God wants than just sharing my needs.",
-        "I trust God to answer when I pray and wait patiently on His timing.",
-        "My prayers include thanksgiving, praise, confession, and requests.",
-        "I expect to grow in my prayer life and intentionally seek help to improve.",
-        "I spend as much time listening to God as talking to Him.",
-        "I pray because I am aware of my complete dependence on God for everything in my life.",
-        "Regular participation in group prayer characterizes my prayer life.",
-        "I try to keep a prayerful attitude throughout my day.",
-        "I believe my prayers impact my life and the lives of others.",
-        "I engage in a daily prayer time."
-    ],
-    "Fellowship with Believers": [
-        "I forgive others when their actions harm me.",
-        "I admit my errors in relationships and humbly seek forgiveness from the one I’ve hurt.",
-        "I allow other Christians to hold me accountable for spiritual growth.",
-        "I seek to live in harmony with other members of my family.",
-        "I put the needs of others before my own.",
-        "I am gentle and kind in my interactions with others.",
-        "I welcome feedback from others to help me improve my relationships.",
-        "I show patience in my relationships with family and friends.",
-        "I encourage others by pointing out their strengths rather than criticizing their weaknesses.",
-        "My time commitments demonstrate that I value relationships over work/career/hobbies."
-    ],
-    "Witness to the World": [
-        "I share my faith in Christ with non-believers.",
-        "I regularly pray for non-believers I know.",
-        "I make my faith known to my neighbors and/or fellow employees.",
-        "I intentionally maintain relationships with non-believers in order to share my testimony.",
-        "When confronted about my faith, I remain consistent and firm in my testimony.",
-        "I help others learn how to share their personal stories about faith.",
-        "I ensure that those I share my faith with receive support to help them grow in Christ.",
-        "I encourage my church and friends to support mission efforts.",
-        "I am prepared to share my testimony at any time.",
-        "My actions demonstrate a belief in and commitment to the Great Commission (Matthew 28:19-20)."
-    ],
-    "Minister to Others": [
-        "I understand my spiritual gifts and use those gifts to serve others.",
-        "I serve others expecting nothing in return.",
-        "I sacrificially contribute my finances/resources to help others in my church and community.",
-        "I go out of my way to show love to people I meet.",
-        "Meeting the needs of others provides a sense of purpose in my life.",
-        "I share what the Bible teaches with those I help when I have the chance.",
-        "I act as if others' needs are as important as my own.",
-        "I expect God to use me every day in His kingdom work.",
-        "I regularly contribute time to a ministry at my church.",
-        "I assist others in discovering their gifts and getting involved in serving."
-    ]
+    ]#,
+    # "Pray in Faith": [
+    #     "When I pray, I focus more on finding out what God wants than just sharing my needs.",
+    #     "I trust God to answer when I pray and wait patiently on His timing.",
+    #     "My prayers include thanksgiving, praise, confession, and requests.",
+    #     "I expect to grow in my prayer life and intentionally seek help to improve.",
+    #     "I spend as much time listening to God as talking to Him.",
+    #     "I pray because I am aware of my complete dependence on God for everything in my life.",
+    #     "Regular participation in group prayer characterizes my prayer life.",
+    #     "I try to keep a prayerful attitude throughout my day.",
+    #     "I believe my prayers impact my life and the lives of others.",
+    #     "I engage in a daily prayer time."
+    # ],
+    # "Fellowship with Believers": [
+    #     "I forgive others when their actions harm me.",
+    #     "I admit my errors in relationships and humbly seek forgiveness from the one I’ve hurt.",
+    #     "I allow other Christians to hold me accountable for spiritual growth.",
+    #     "I seek to live in harmony with other members of my family.",
+    #     "I put the needs of others before my own.",
+    #     "I am gentle and kind in my interactions with others.",
+    #     "I welcome feedback from others to help me improve my relationships.",
+    #     "I show patience in my relationships with family and friends.",
+    #     "I encourage others by pointing out their strengths rather than criticizing their weaknesses.",
+    #     "My time commitments demonstrate that I value relationships over work/career/hobbies."
+    # ],
+    # "Witness to the World": [
+    #     "I share my faith in Christ with non-believers.",
+    #     "I regularly pray for non-believers I know.",
+    #     "I make my faith known to my neighbors and/or fellow employees.",
+    #     "I intentionally maintain relationships with non-believers in order to share my testimony.",
+    #     "When confronted about my faith, I remain consistent and firm in my testimony.",
+    #     "I help others learn how to share their personal stories about faith.",
+    #     "I ensure that those I share my faith with receive support to help them grow in Christ.",
+    #     "I encourage my church and friends to support mission efforts.",
+    #     "I am prepared to share my testimony at any time.",
+    #     "My actions demonstrate a belief in and commitment to the Great Commission (Matthew 28:19-20)."
+    # ],
+    # "Minister to Others": [
+    #     "I understand my spiritual gifts and use those gifts to serve others.",
+    #     "I serve others expecting nothing in return.",
+    #     "I sacrificially contribute my finances/resources to help others in my church and community.",
+    #     "I go out of my way to show love to people I meet.",
+    #     "Meeting the needs of others provides a sense of purpose in my life.",
+    #     "I share what the Bible teaches with those I help when I have the chance.",
+    #     "I act as if others' needs are as important as my own.",
+    #     "I expect God to use me every day in His kingdom work.",
+    #     "I regularly contribute time to a ministry at my church.",
+    #     "I assist others in discovering their gifts and getting involved in serving."
+    # ]
 }
 
 # Page 1: User Information
