@@ -227,13 +227,13 @@ elif 2 <= st.session_state.page <= len(sections) + 1:
         st.session_state.user_responses[section_name][i] = response  # Store response directly
 
     # Layout for Previous and Next buttons
-    col1, col2 = st.columns([1, 1])
+col1, col2 = st.columns([1, 1])
 
-    with col1:
+with col1:
     if st.button("Previous"):
         st.session_state.page -= 1
 
-    with col2:
+with col2:
     # Inject CSS to right-align the Next button
     st.markdown(
         """
@@ -250,6 +250,7 @@ elif 2 <= st.session_state.page <= len(sections) + 1:
             st.error("Please answer all questions before proceeding.")
         else:
             st.session_state.page += 1  # Move to the next page
+
 
 # Page for displaying results
 elif st.session_state.page == len(sections) + 2:
