@@ -87,6 +87,8 @@ if "user_responses" not in st.session_state:
 # Initialize personal info keys in session state
 if "name" not in st.session_state:
     st.session_state.name = ""
+if "email" not in st.session_state:
+    st.session_state.email = ""
 if "age" not in st.session_state:
     st.session_state.age = 18  # Default age
 if "parent_name" not in st.session_state:
