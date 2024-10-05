@@ -10,6 +10,9 @@ from email.mime.text import MIMEText
 import matplotlib.pyplot as plt
 import io
 import os
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+
 
 
 # client = OpenAI(api_key = "<API_KEY>")
@@ -70,57 +73,6 @@ def generate_interpretation(section_name, average_score):
     )
     return response.choices[0].text.strip()
 
-gmail_user = os.getenv("GMAIL_USER")  # Set this environment variable
-gmail_password = os.getenv("GMAIL_PASSWORD")  # Set this environment variable
-
-
-def send_results_email(user_email, additional_emails, fig, averages):
-    # Create a MIME email message
-    msg = MIMEMultipart()
-    msg['From'] = gmail_user  # Replace with your Gmail account
-    msg['To'] = user_email
-    msg['Subject'] = "Your Spiritual Growth Assessment Results"
-
-    # Create email body
-    body = "Here are your results:\n\n"
-    for section, average in averages.items():
-        body += f"{section}: {average:.2f}\n"
-
-    msg.attach(MIMEText(body, 'plain'))
-
-    # Save the radar chart to a BytesIO object
-    buf = io.BytesIO()
-    fig.write_image(buf, format='png')
-    buf.seek(0)
-
-    # Attach radar chart
-    attachment = MIMEText(buf.read(), 'png')
-    attachment.add_header('Content-Disposition', 'attachment; filename="radar_chart.png"')
-    msg.attach(attachment)
-
-    # Send the email using Gmail's SMTP server
-    try:
-        with smtplib.SMTP('smtp.gmail.com', 587) as server:
-            server.starttls()  # Secure the connection
-            server.login(gmail_user, gmail_password)  # Use your Gmail account and App Password
-            server.send_message(msg)
-            print(f"Email sent to {user_email}")
-    except Exception as e:
-        print(f"Failed to send email: {str(e)}")
-
-    # Send to additional emails if provided
-    if additional_emails:
-        for email in additional_emails.split(','):
-            email = email.strip()
-            msg['To'] = email  # Change recipient
-            try:
-                with smtplib.SMTP('smtp.gmail.com', 587) as server:
-                    server.starttls()
-                    server.login(gmail_user, gmail_password)
-                    server.send_message(msg)
-                    print(f"Email sent to {email}")
-            except Exception as e:
-                print(f"Failed to send email to {email}: {str(e)}")
 
 # Set up session state to manage the current page and user responses
 if "page" not in st.session_state:
@@ -337,6 +289,8 @@ elif st.session_state.page == len(sections) + 2:
     for section, average in averages.items():
         st.write(f"{section}: {average:.2f}")
 
+    
+
     # Initialize insights in session state
     if 'insights_generated' not in st.session_state:
         st.session_state.insights_generated = False
@@ -355,66 +309,37 @@ elif st.session_state.page == len(sections) + 2:
         else:
             st.warning("Insights have already been generated. Please refresh to get new insights.")
 
+    # Button to create PDF
+    if st.button("Download PDF of Results"):
+        pdf_file = create_pdf(averages, fig)
+        st.download_button(
+            label="Download PDF",
+            data=pdf_file,
+            file_name="spiritual_growth_assessment_results.pdf",
+            mime="application/pdf"
+        )
 
-    # Collect email addresses
-    st.header("Email Your Results")
-    user_email = st.text_input("Your Email (required)")
-    additional_emails = st.text_input("Additional Emails (comma-separated)")
+def create_pdf(averages, fig):
+    # Create a PDF buffer
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer, pagesize=letter)
 
-    if st.button("Send Results"):
-        # Validate email input
-        if not user_email:
-            st.error("Please enter your email address.")
-        else:
-            # Call the email function to send results
-            send_results_email(user_email, additional_emails, fig, averages)
-            st.success("Results emailed successfully!")
+    # Add Title
+    p.setFont("Helvetica-Bold", 20)
+    p.drawString(100, 750, "Spiritual Growth Assessment Results")
 
-
-def send_results_email(user_email, additional_emails, fig, averages):
-    # Create a MIME email message
-    msg = MIMEMultipart()
-    msg['From'] = gmail_user  # Replace with your Gmail account
-    msg['To'] = user_email
-    msg['Subject'] = "Your Spiritual Growth Assessment Results"
-
-    # Create email body
-    body = "Here are your results:\n\n"
+    # Add Summary
+    p.setFont("Helvetica", 12)
+    y_position = 700
     for section, average in averages.items():
-        body += f"{section}: {average:.2f}\n"
+        p.drawString(100, y_position, f"{section}: {average:.2f}")
+        y_position -= 20  # Move down for next line
 
-    msg.attach(MIMEText(body, 'plain'))
+    # Add Radar Chart as Image
+    img_buf = io.BytesIO(fig.to_image(format="png"))  # Get image of the figure
+    p.drawImage(img_buf, 50, y_position, width=500, height=300)  # Adjust position and size as needed
 
-    # Save the radar chart to a BytesIO object
-    buf = io.BytesIO()
-    fig.write_image(buf, format='png')
-    buf.seek(0)
-
-    # Attach radar chart
-    attachment = MIMEText(buf.read(), 'png')
-    attachment.add_header('Content-Disposition', 'attachment; filename="radar_chart.png"')
-    msg.attach(attachment)
-
-    # Send the email using Gmail's SMTP server
-    try:
-        with smtplib.SMTP('smtp.gmail.com', 587) as server:
-            server.starttls()  # Secure the connection
-            server.login(gmail_user, gmail_password)  # Use your Gmail account and App Password
-            server.send_message(msg)
-            print(f"Email sent to {user_email}")
-    except Exception as e:
-        print(f"Failed to send email: {str(e)}")
-
-    # Send to additional emails if provided
-    if additional_emails:
-        for email in additional_emails.split(','):
-            email = email.strip()
-            msg['To'] = email  # Change recipient
-            try:
-                with smtplib.SMTP('smtp.gmail.com', 587) as server:
-                    server.starttls()
-                    server.login(gmail_user, gmail_password)
-                    server.send_message(msg)
-                    print(f"Email sent to {email}")
-            except Exception as e:
-                print(f"Failed to send email to {email}: {str(e)}")
+    p.showPage()
+    p.save()
+    buffer.seek(0)
+    return buffer.getvalue()
