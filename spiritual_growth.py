@@ -70,7 +70,8 @@ def generate_interpretation(section_name, average_score):
     )
     return response.choices[0].text.strip()
 
-def create_pdf(averages, fig):
+# Create PDF function defined before it is used
+def create_pdf(averages, insights, fig):
     # Create a temporary file to save the radar chart image
     with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_img:
         img_path = temp_img.name
@@ -91,8 +92,13 @@ def create_pdf(averages, fig):
         p.drawString(100, y_position, f"{section}: {average:.2f}")
         y_position -= 20  # Move down for next line
 
+        # Add Insights for each section
+        if section in insights:
+            p.drawString(100, y_position, insights[section])
+            y_position -= 40  # Extra space for insights
+
     # Add Radar Chart as Image
-    p.drawImage(img_path, 50, y_position, width=500, height=300)  # Adjust position and size as needed
+    p.drawImage(img_path, 50, y_position - 200, width=500, height=300)  # Adjust position and size as needed
 
     p.showPage()
     p.save()
