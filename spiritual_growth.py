@@ -52,6 +52,13 @@ Ministering to others is an expression of Christ's love in action. By serving th
 **Scripture Reference:**  
 *"For even the Son of Man came not to be served but to serve, and to give his life as a ransom for many."* — Mark 10:45""",
 }
+
+# Initialize session state variables if not already done
+if 'page' not in st.session_state:
+    st.session_state.page = 0
+if 'responses' not in st.session_state:
+    st.session_state.responses = {section: {} for section in section_descriptions.keys()}
+
     
 # Create openai connection
 def generate_interpretation(section_name, average_score):
@@ -196,45 +203,48 @@ if st.session_state.page == 1:
         else:
             st.session_state.page += 1  # Move to the next page
 
-# Pages for each section
-elif 2 <= st.session_state.page <= len(sections) + 1:
-    section_index = st.session_state.page - 2
-    section_name = list(sections.keys())[section_index]
-
-    # Progress Bar Calculation
-    total_sections = len(sections)
-    progress = (st.session_state.page - 1) / (total_sections + 1)  # +1 for the results page
-    st.progress(progress)
-
-    st.header(section_name)
-    st.write(section_descriptions[section])
+# User Information Section
+if st.session_state.page == 0:
+    st.header("User Information")
+    st.write("Please fill in your personal information and your parent's information (if applicable) to help us understand your context better.")
     
-    # Define Likert scale options with a blank default
-    likert_scale = ["", "Never", "Rarely", "Sometimes", "Often", "Always"]
+    # User info fields here
+    name = st.text_input("Name", key="name")
+    age = st.number_input("Age", min_value=1, max_value=120, value=18, key="age")
+    parent_name = st.text_input("Parent's Name (if applicable)", key="parent_name")
 
-    # Initialize responses for the current section
-    if section_name not in st.session_state.user_responses:
-        st.session_state.user_responses[section_name] = [""] * len(sections[section_name])
+    # Navigation buttons
+    if st.button("Next"):
+        if name and age:
+            st.session_state.page += 1
+        else:
+            st.warning("Please fill out your name and age before proceeding.")
 
-    # Ask questions for the current section
-    for i, question in enumerate(sections[section_name]):
-        # Load the stored value for the question
-        response = st.selectbox(question, likert_scale, index=likert_scale.index(st.session_state.user_responses[section_name][i]), key=f"{section_name}_{i}")
-        st.session_state.user_responses[section_name][i] = response  # Store response directly
+# Dynamic Sections for Each Assessment Area
+sections = list(section_descriptions.keys())
+for idx, section in enumerate(sections):
+    if st.session_state.page == idx + 1:
+        st.header(section)
+        st.write(section_descriptions[section])  # Add description for the section
 
-    # Layout for Previous and Next buttons
-    col1, col2 = st.columns([1, 1])
+        # Questions for the section
+        questions = ["Question 1", "Question 2"]  # Replace with your actual questions
+        for question in questions:
+            response_key = f"{section}_{question}"
+            st.radio(question, options=["Never", "Rarely", "Sometimes", "Often", "Always"], key=response_key)
+            st.session_state.responses[section][question] = st.session_state.get(response_key, None)
 
-    with col1:
-        if st.button("Previous"):
-            st.session_state.page -= 1
-
-    with col2:
-        if st.button("Next"):
-            if any(response == "" for response in st.session_state.user_responses[section_name]):
-                st.error("Please answer all questions before proceeding.")
-            else:
-                st.session_state.page += 1  # Move to the next page
+        # Navigation buttons
+        col1, col2 = st.columns([1, 1])
+        with col1:
+            if st.button("Previous"):
+                st.session_state.page -= 1
+        with col2:
+            if st.button("Next"):
+                if all(st.session_state.responses[section].get(question) for question in questions):
+                    st.session_state.page += 1
+                else:
+                    st.warning("Please answer all questions before proceeding.")
 
 # Page for displaying results
 elif st.session_state.page == len(sections) + 2:
