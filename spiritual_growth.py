@@ -17,9 +17,7 @@ def store_value(key):
 # Section descriptions
 section_descriptions = {
     "User Information": "Please fill in your personal information and your parent's information (if applicable) to help us understand your context better.",
-    "Abide in Christ": "Abiding in Christ means nurturing a close relationship with Him, allowing His presence to guide your life. It involves trusting His love and seeking His will in all aspects of life. As you draw near to Christ, you will experience transformation and spiritual growth.  
-**Scripture Reference:**  
-*"I am the vine; you are the branches. Whoever abides in me and I in him, he it is that bears much fruit, for apart from me you can do nothing."* — John 15:5",
+    "Abide in Christ": "Abiding in Christ means nurturing a close relationship with Him, allowing His presence to guide your life. It involves trusting His love and seeking His will in all aspects of life. As you draw near to Christ, you will experience transformation and spiritual growth.",
     "Live in the Word": "Here, we evaluate how you engage with the Bible and apply its teachings in your daily life.",
     "Pray in Faith": "This section focuses on your prayer life, including how you communicate with God and your expectations in prayer.",
     "Fellowship with Believers": "In this section, we look at your relationships with other Christians and how you engage in community.",
