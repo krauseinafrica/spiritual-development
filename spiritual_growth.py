@@ -179,7 +179,7 @@ if st.session_state.page == 1:
     st.header("User Information")
     st.write("Please fill in your personal information and your parent's information (if applicable) to help us understand your context better.")
     st.session_state.name = st.text_input("Name (required)", value=st.session_state.name)
-    st.session_state.name = st.text_input("Email (required)", value=st.session_state.email)
+    st.session_state.email = st.text_input("Email (required)", value=st.session_state.email)
     st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=st.session_state.age, step=1)
 
     if st.session_state.age < 18:
