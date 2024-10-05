@@ -14,8 +14,7 @@ client = OpenAI(api_key = st.secrets["openai"]["API_KEY"])
 def store_value(key):
     st.session_state[key] = st.session_state["_" + key]
 
-# Section descriptions
-ection_descriptions = {
+section_descriptions = {
     "Abide in Christ": """### **1. Abide in Christ**  
 **Summary:**  
 Abiding in Christ means nurturing a close relationship with Him, allowing His presence to guide your life. It involves trusting His love and seeking His will in all aspects of life. As you draw near to Christ, you will experience transformation and spiritual growth.  
