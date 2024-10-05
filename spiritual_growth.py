@@ -227,26 +227,13 @@ elif 2 <= st.session_state.page <= len(sections) + 1:
         st.session_state.user_responses[section_name][i] = response  # Store response directly
 
     # Layout for Previous and Next buttons
-    col1, col2 = st.columns([1, 1])
-    
+    col1, col2 = st.columns([1, 1])  # Two columns of equal width
+
     with col1:
         if st.button("Previous"):
             st.session_state.page -= 1
-    
+
     with col2:
-        # Use st.markdown to inject custom HTML for right alignment
-        st.markdown(
-            """
-            <div style="text-align: right;">
-                <button style="padding: 0.5em 1em; background-color: #4CAF50; color: white; border: none; border-radius: 5px;">
-                    Next
-                </button>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-    
-        # Handle button click with a condition
         if st.button("Next"):
             if any(response == "" for response in st.session_state.user_responses[section_name]):
                 st.error("Please answer all questions before proceeding.")
