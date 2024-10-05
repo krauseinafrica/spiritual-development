@@ -295,7 +295,6 @@ elif 2 <= st.session_state.page <= len(sections) + 1:
             else:
                 st.session_state.page += 1  # Move to the next page
             
-# Page for displaying results
 elif st.session_state.page == len(sections) + 2:
     st.header("Results")
 
@@ -330,18 +329,31 @@ elif st.session_state.page == len(sections) + 2:
         showlegend=False
     )
 
+    # Display the radar chart
     st.plotly_chart(fig)
 
-    # Brief explanation of the results
-    st.header("Results Summary")
+    # Show average scores
+    st.header("Average Scores")
     for section, average in averages.items():
         st.write(f"{section}: {average:.2f}")
 
-        # Generate interpretation using OpenAI
-        with st.spinner(f"Interpreting your results for '{section}'..."):
-            interpretation = generate_interpretation(section, average)
-        
-        st.write(interpretation)
+    # Initialize insights in session state
+    if 'insights_generated' not in st.session_state:
+        st.session_state.insights_generated = False
+
+    # Option to interpret results
+    if st.button("Get Insights on Your Results"):
+        if not st.session_state.insights_generated:
+            with st.spinner("Getting insights..."):
+                # Generate interpretations using your existing function
+                for section in sections.keys():
+                    interpretation = generate_interpretation(section, averages[section])
+                    st.markdown(f"### **{section} Insights**")
+                    st.write(interpretation)
+                
+                st.session_state.insights_generated = True  # Mark insights as generated
+        else:
+            st.warning("Insights have already been generated. Please refresh to get new insights.")
 
 
     # Collect email addresses
