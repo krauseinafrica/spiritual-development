@@ -177,7 +177,7 @@ if st.session_state.page == 1:
     st.title("Spiritual Growth Assessment")
 
     st.header("User Information")
-    st.write("Please fill in your personal information and your parent's information (if applicable) to help us understand your context better.")
+    st.write("Please fill in your personal information below. Include your parent's information (if applicable). We will be adding in the ability to email the results to yourself and share with others in a future version. ")
     st.session_state.name = st.text_input("Name (required)", value=st.session_state.name)
     st.session_state.email = st.text_input("Email (required)", value=st.session_state.email)
     st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=st.session_state.age, step=1)
