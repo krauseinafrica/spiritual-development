@@ -16,13 +16,42 @@ def store_value(key):
 
 # Section descriptions
 section_descriptions = {
-    "User Information": "Please fill in your personal information and your parent's information (if applicable) to help us understand your context better.",
-    "Abide in Christ": "Abiding in Christ means nurturing a close relationship with Him, allowing His presence to guide your life. It involves trusting His love and seeking His will in all aspects of life. As you draw near to Christ, you will experience transformation and spiritual growth.",
-    "Live in the Word": "Here, we evaluate how you engage with the Bible and apply its teachings in your daily life.",
-    "Pray in Faith": "This section focuses on your prayer life, including how you communicate with God and your expectations in prayer.",
-    "Fellowship with Believers": "In this section, we look at your relationships with other Christians and how you engage in community.",
-    "Witness to the World": "This section evaluates how you share your faith and engage with those who do not know Christ.",
-    "Minister to Others": "Here, we assess how you serve others and use your spiritual gifts in ministry."
+    "User Information": "Please fill in your personal information below. Fill in your parent's information (if applicable).",
+    "Abide in Christ": """### **1. Abide in Christ**  
+    **Summary:**  
+    Abiding in Christ means nurturing a close relationship with Him, allowing His presence to guide your life. It involves trusting His love and seeking His will in all aspects of life. As you draw near to Christ, you will experience transformation and spiritual growth.  
+    **Scripture Reference:**  
+    *"I am the vine; you are the branches. Whoever abides in me and I in him, he it is that bears much fruit, for apart from me you can do nothing."* — John 15:5""",
+    
+    "Live in the Word": """### **2. Live in the Word**  
+    **Summary:**  
+    Living in the Word emphasizes the importance of engaging with Scripture regularly. The Bible provides guidance, wisdom, and truth that shape your beliefs and actions. By studying God’s Word, you equip yourself to navigate life's challenges and grow in your faith.  
+    **Scripture Reference:**  
+    *"Your word is a lamp to my feet and a light to my path."* — Psalm 119:105""",
+    
+    "Pray in Faith": """### **3. Pray in Faith**  
+    **Summary:**  
+    Prayer is vital for developing a strong relationship with God. It allows you to communicate with Him, express your needs, and seek His guidance. Praying in faith strengthens your trust in God and deepens your understanding of His will for your life.  
+    **Scripture Reference:**  
+    *"And whatever you ask in prayer, you will receive, if you have faith."* — Matthew 21:22""",
+    
+    "Fellowship with Believers": """### **4. Fellowship with Believers**  
+    **Summary:**  
+    Fellowship with other believers fosters community and accountability in your spiritual journey. By encouraging one another, sharing burdens, and building meaningful relationships, you grow together in faith and reflect Christ's love to the world.  
+    **Scripture Reference:**  
+    *"And let us consider how to stir up one another to love and good works, not neglecting to meet together, as is the habit of some, but encouraging one another."* — Hebrews 10:24-25""",
+    
+    "Witness to the World": """### **5. Witness to the World**  
+    **Summary:**  
+    Being a witness to the world involves sharing your faith with others. By living out your beliefs and communicating the message of Christ, you can impact the lives of those around you and fulfill the Great Commission to spread the Gospel.  
+    **Scripture Reference:**  
+    *"Go therefore and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit."* — Matthew 28:19""",
+    
+    "Minister to Others": """### **6. Minister to Others**  
+    **Summary:**  
+    Ministering to others is an expression of Christ's love in action. By serving those in need and using your spiritual gifts, you reflect God’s compassion and contribute to the well-being of your community. Your acts of service can lead others to experience God's love firsthand.  
+    **Scripture Reference:**  
+    *"For even the Son of Man came not to be served but to serve, and to give his life as a ransom for many."* — Mark 10:45""",
 }
     
 # Create openai connection
