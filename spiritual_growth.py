@@ -201,7 +201,7 @@ if st.session_state.page == 1:
 elif 2 <= st.session_state.page <= len(sections) + 1:
     section_index = st.session_state.page - 2
     section_name = list(sections.keys())[section_index]
-    section_details = list(section_descriptions.keys())[section_index]
+    # section_details = list(section_descriptions.keys())[section_index]
 
     # Progress Bar Calculation
     total_sections = len(sections)
@@ -209,7 +209,7 @@ elif 2 <= st.session_state.page <= len(sections) + 1:
     st.progress(progress)
 
     st.header(section_name)
-    st.write(section_details[section_name])
+    # st.write(section_details[section_name])
     # Define Likert scale options with a blank default
     likert_scale = ["", "Never", "Rarely", "Sometimes", "Often", "Always"]
 
