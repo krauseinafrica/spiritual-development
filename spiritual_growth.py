@@ -1,16 +1,8 @@
 import streamlit as st
 import numpy as np
-import tempfile
 import plotly.graph_objects as go
 import openai
 from openai import OpenAI
-import matplotlib.pyplot as plt
-import io
-import os
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-
-
 
 # client = OpenAI(api_key = "<API_KEY>")
 # client = st.secrets["openai"]["API_KEY"]
@@ -70,46 +62,8 @@ def generate_interpretation(section_name, average_score):
     )
     return response.choices[0].text.strip()
 
-# Create PDF function defined before it is used
-def create_pdf(averages, insights, fig):
-    # Create a temporary file to save the radar chart image
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.png') as temp_img:
-        img_path = temp_img.name
-        fig.write_image(img_path)  # Save the figure as a PNG
-
-    # Create a PDF buffer
-    buffer = io.BytesIO()
-    p = canvas.Canvas(buffer, pagesize=letter)
-
-    # Add Title
-    p.setFont("Helvetica-Bold", 20)
-    p.drawString(100, 750, "Spiritual Growth Assessment Results")
-
-    # Add Summary
-    p.setFont("Helvetica", 12)
-    y_position = 700
-    for section, average in averages.items():
-        p.drawString(100, y_position, f"{section}: {average:.2f}")
-        y_position -= 20  # Move down for next line
-
-        # Add Insights for each section
-        if section in insights:
-            p.drawString(100, y_position, insights[section])
-            y_position -= 40  # Extra space for insights
-
-    # Add Radar Chart as Image
-    p.drawImage(img_path, 50, y_position - 200, width=500, height=300)  # Adjust position and size as needed
-
-    p.showPage()
-    p.save()
     
-    # Clean up the temporary image file
-    os.remove(img_path)
 
-    buffer.seek(0)
-    return buffer.getvalue()
-
-    
 # Set up session state to manage the current page and user responses
 if "page" not in st.session_state:
     st.session_state.page = 1
@@ -121,6 +75,8 @@ if "user_responses" not in st.session_state:
 # Initialize personal info keys in session state
 if "name" not in st.session_state:
     st.session_state.name = ""
+if "email" not in st.session_state:
+    st.session_state.email = ""
 if "age" not in st.session_state:
     st.session_state.age = 18  # Default age
 if "parent_name" not in st.session_state:
@@ -153,55 +109,55 @@ sections = {
         "I try to be the same person in public and private.",
         "I use the Bible as the guide for the way I think and act.",
         "I study the Bible for the purpose of discovering truth for daily living."
-    ]#,
-    # "Pray in Faith": [
-    #     "When I pray, I focus more on finding out what God wants than just sharing my needs.",
-    #     "I trust God to answer when I pray and wait patiently on His timing.",
-    #     "My prayers include thanksgiving, praise, confession, and requests.",
-    #     "I expect to grow in my prayer life and intentionally seek help to improve.",
-    #     "I spend as much time listening to God as talking to Him.",
-    #     "I pray because I am aware of my complete dependence on God for everything in my life.",
-    #     "Regular participation in group prayer characterizes my prayer life.",
-    #     "I try to keep a prayerful attitude throughout my day.",
-    #     "I believe my prayers impact my life and the lives of others.",
-    #     "I engage in a daily prayer time."
-    # ],
-    # "Fellowship with Believers": [
-    #     "I forgive others when their actions harm me.",
-    #     "I admit my errors in relationships and humbly seek forgiveness from the one I’ve hurt.",
-    #     "I allow other Christians to hold me accountable for spiritual growth.",
-    #     "I seek to live in harmony with other members of my family.",
-    #     "I put the needs of others before my own.",
-    #     "I am gentle and kind in my interactions with others.",
-    #     "I welcome feedback from others to help me improve my relationships.",
-    #     "I show patience in my relationships with family and friends.",
-    #     "I encourage others by pointing out their strengths rather than criticizing their weaknesses.",
-    #     "My time commitments demonstrate that I value relationships over work/career/hobbies."
-    # ],
-    # "Witness to the World": [
-    #     "I share my faith in Christ with non-believers.",
-    #     "I regularly pray for non-believers I know.",
-    #     "I make my faith known to my neighbors and/or fellow employees.",
-    #     "I intentionally maintain relationships with non-believers in order to share my testimony.",
-    #     "When confronted about my faith, I remain consistent and firm in my testimony.",
-    #     "I help others learn how to share their personal stories about faith.",
-    #     "I ensure that those I share my faith with receive support to help them grow in Christ.",
-    #     "I encourage my church and friends to support mission efforts.",
-    #     "I am prepared to share my testimony at any time.",
-    #     "My actions demonstrate a belief in and commitment to the Great Commission (Matthew 28:19-20)."
-    # ],
-    # "Minister to Others": [
-    #     "I understand my spiritual gifts and use those gifts to serve others.",
-    #     "I serve others expecting nothing in return.",
-    #     "I sacrificially contribute my finances/resources to help others in my church and community.",
-    #     "I go out of my way to show love to people I meet.",
-    #     "Meeting the needs of others provides a sense of purpose in my life.",
-    #     "I share what the Bible teaches with those I help when I have the chance.",
-    #     "I act as if others' needs are as important as my own.",
-    #     "I expect God to use me every day in His kingdom work.",
-    #     "I regularly contribute time to a ministry at my church.",
-    #     "I assist others in discovering their gifts and getting involved in serving."
-    # ]
+    ],
+    "Pray in Faith": [
+        "When I pray, I focus more on finding out what God wants than just sharing my needs.",
+        "I trust God to answer when I pray and wait patiently on His timing.",
+        "My prayers include thanksgiving, praise, confession, and requests.",
+        "I expect to grow in my prayer life and intentionally seek help to improve.",
+        "I spend as much time listening to God as talking to Him.",
+        "I pray because I am aware of my complete dependence on God for everything in my life.",
+        "Regular participation in group prayer characterizes my prayer life.",
+        "I try to keep a prayerful attitude throughout my day.",
+        "I believe my prayers impact my life and the lives of others.",
+        "I engage in a daily prayer time."
+    ],
+    "Fellowship with Believers": [
+        "I forgive others when their actions harm me.",
+        "I admit my errors in relationships and humbly seek forgiveness from the one I’ve hurt.",
+        "I allow other Christians to hold me accountable for spiritual growth.",
+        "I seek to live in harmony with other members of my family.",
+        "I put the needs of others before my own.",
+        "I am gentle and kind in my interactions with others.",
+        "I welcome feedback from others to help me improve my relationships.",
+        "I show patience in my relationships with family and friends.",
+        "I encourage others by pointing out their strengths rather than criticizing their weaknesses.",
+        "My time commitments demonstrate that I value relationships over work/career/hobbies."
+    ],
+    "Witness to the World": [
+        "I share my faith in Christ with non-believers.",
+        "I regularly pray for non-believers I know.",
+        "I make my faith known to my neighbors and/or fellow employees.",
+        "I intentionally maintain relationships with non-believers in order to share my testimony.",
+        "When confronted about my faith, I remain consistent and firm in my testimony.",
+        "I help others learn how to share their personal stories about faith.",
+        "I ensure that those I share my faith with receive support to help them grow in Christ.",
+        "I encourage my church and friends to support mission efforts.",
+        "I am prepared to share my testimony at any time.",
+        "My actions demonstrate a belief in and commitment to the Great Commission (Matthew 28:19-20)."
+    ],
+    "Minister to Others": [
+        "I understand my spiritual gifts and use those gifts to serve others.",
+        "I serve others expecting nothing in return.",
+        "I sacrificially contribute my finances/resources to help others in my church and community.",
+        "I go out of my way to show love to people I meet.",
+        "Meeting the needs of others provides a sense of purpose in my life.",
+        "I share what the Bible teaches with those I help when I have the chance.",
+        "I act as if others' needs are as important as my own.",
+        "I expect God to use me every day in His kingdom work.",
+        "I regularly contribute time to a ministry at my church.",
+        "I assist others in discovering their gifts and getting involved in serving."
+    ]
 }
 
 # Page 1: User Information
@@ -211,6 +167,7 @@ if st.session_state.page == 1:
     st.header("User Information")
     st.write("Please fill in your personal information below. Include your parent's information (if applicable). We will be adding in the ability to email the results to yourself and share with others in a future version. ")
     st.session_state.name = st.text_input("Name (required)", value=st.session_state.name)
+    st.session_state.email = st.text_input("Email (required)", value=st.session_state.email)
     st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=st.session_state.age, step=1)
 
     if st.session_state.age < 18:
@@ -289,16 +246,10 @@ elif st.session_state.page == len(sections) + 2:
 
     # Calculate averages for each section
     averages = {}
-    insights = {}
     likert_scale_values = {"Never": 1, "Rarely": 2, "Sometimes": 3, "Often": 4, "Always": 5}
-    
     for section in sections:
         responses = [likert_scale_values[resp] for resp in st.session_state.user_responses.get(section, []) if resp != ""]
         averages[section] = np.mean(responses) if responses else 0  # Prevent division by zero
-
-        # Generate interpretation using OpenAI
-        with st.spinner(f"Interpreting your results for '{section}'..."):
-            insights[section] = generate_interpretation(section, averages[section])
 
     # Create radar chart
     fig = go.Figure()
@@ -324,18 +275,28 @@ elif st.session_state.page == len(sections) + 2:
         showlegend=False
     )
 
+    # Display the radar chart
     st.plotly_chart(fig)
 
-    # Brief explanation of the results
-    st.header("Results Summary")
+    # Show average scores
+    st.header("Average Scores")
     for section, average in averages.items():
         st.write(f"{section}: {average:.2f}")
-        st.write(insights[section])  # Show insights on Streamlit
 
-    # PDF Download Button
-    if st.button("Download PDF of Results"):
-        pdf = create_pdf(averages, insights, fig)  # Pass fig here
-        st.download_button("Download PDF", data=pdf, file_name="spiritual_growth_assessment_results.pdf", mime="application/pdf")
+    # Initialize insights in session state
+    if 'insights_generated' not in st.session_state:
+        st.session_state.insights_generated = False
 
-
-
+    # Option to interpret results
+    if st.button("Get Insights on Your Results"):
+        if not st.session_state.insights_generated:
+            with st.spinner("Getting insights..."):
+                # Generate interpretations using your existing function
+                for section in sections.keys():
+                    interpretation = generate_interpretation(section, averages[section])
+                    st.markdown(f"### **{section} Insights**")
+                    st.write(interpretation)
+                
+                st.session_state.insights_generated = True  # Mark insights as generated
+        else:
+            st.warning("Insights have already been generated. Please refresh to get new insights.")
