@@ -13,6 +13,17 @@ client = OpenAI(api_key = st.secrets["openai"]["API_KEY"])
 # Functions to store and load values
 def store_value(key):
     st.session_state[key] = st.session_state["_" + key]
+
+# Section descriptions
+section_descriptions = {
+    "User Information": "Please fill in your personal information and your parent's information (if applicable) to help us understand your context better.",
+    "Abide in Christ": "This section assesses your relationship with Christ, focusing on your personal time with Him and how it influences your life.",
+    "Live in the Word": "Here, we evaluate how you engage with the Bible and apply its teachings in your daily life.",
+    "Pray in Faith": "This section focuses on your prayer life, including how you communicate with God and your expectations in prayer.",
+    "Fellowship with Believers": "In this section, we look at your relationships with other Christians and how you engage in community.",
+    "Witness to the World": "This section evaluates how you share your faith and engage with those who do not know Christ.",
+    "Minister to Others": "Here, we assess how you serve others and use your spiritual gifts in ministry."
+}
     
 # Create openai connection
 def generate_interpretation(section_name, average_score):
@@ -137,6 +148,8 @@ if st.session_state.page == 1:
     st.title("Spiritual Growth Assessment")
 
     st.header("User Information")
+    st.write(section_descriptions["User Information"])
+
     st.session_state.name = st.text_input("Name (required)", value=st.session_state.name)
 
     st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=st.session_state.age, step=1)
@@ -167,7 +180,8 @@ elif 2 <= st.session_state.page <= len(sections) + 1:
     st.progress(progress)
 
     st.header(section_name)
-
+    st.write(section_descriptions[section])
+    
     # Define Likert scale options with a blank default
     likert_scale = ["", "Never", "Rarely", "Sometimes", "Often", "Always"]
 
