@@ -59,38 +59,38 @@ if "parent_contact" not in st.session_state:
 # Update sections with new questions
 sections = {
     "Abide in Christ": [
-        "I practice a regular quiet time and look forward to that time with Christ.",
+        "I regularly spend quiet time with Christ and look forward to it.",
         "When making choices, I seek Christ’s guidance first.",
         "My relationship with Christ is motivated more by love than duty or fear.",
         "I experience life change as a result of my worship experiences.",
         "When God makes me aware of His specific will in an area of my life, I follow His leading.",
-        "I believe Christ provides the only way for a relationship with God.",
+        "I believe that Jesus is the only way to have a relationship with God.",
         "My actions demonstrate a desire to build God’s kingdom rather than my own.",
-        "Peace, contentment, and joy characterize my life rather than worry and anxiety.",
+        "I experience peace, contentment, and joy in my life instead of worry and anxiety.",
         "I trust Christ to help me through any problem or crisis I face.",
         "I remain confident of God’s love and provision during difficult times."
     ],
     "Live in the Word": [
         "I regularly read and study my Bible.",
         "I believe the Bible is God’s Word and provides His instructions for life.",
-        "I evaluate cultural ideas and lifestyles by biblical standards.",
+        "I compare ideas from culture to what the Bible teaches.",
         "I can answer questions about life and faith from a biblical perspective.",
         "I replace impure or inappropriate thoughts with God’s truth.",
         "I demonstrate honesty in my actions and conversation.",
         "When the Bible exposes an area of my life needing change, I respond to make things right.",
-        "Generally, my public and private self are the same",
+        "I try to be the same person in public and private.",
         "I use the Bible as the guide for the way I think and act.",
         "I study the Bible for the purpose of discovering truth for daily living."
     ],
     "Pray in Faith": [
-        "My prayers focus on discovering God’s will more than expressing my needs.",
+        "When I pray, I focus more on finding out what God wants than just sharing my needs.",
         "I trust God to answer when I pray and wait patiently on His timing.",
         "My prayers include thanksgiving, praise, confession, and requests.",
         "I expect to grow in my prayer life and intentionally seek help to improve.",
         "I spend as much time listening to God as talking to Him.",
         "I pray because I am aware of my complete dependence on God for everything in my life.",
         "Regular participation in group prayer characterizes my prayer life.",
-        "I maintain an attitude of prayer throughout each day.",
+        "I try to keep a prayerful attitude throughout my day.",
         "I believe my prayers impact my life and the lives of others.",
         "I engage in a daily prayer time."
     ],
@@ -99,9 +99,9 @@ sections = {
         "I admit my errors in relationships and humbly seek forgiveness from the one I’ve hurt.",
         "I allow other Christians to hold me accountable for spiritual growth.",
         "I seek to live in harmony with other members of my family.",
-        "I place the interest of others above my self-interest.",
+        "I put the needs of others before my own.",
         "I am gentle and kind in my interactions with others.",
-        "I encourage and listen to feedback from others to help me discover areas for relationship growth.",
+        "I welcome feedback from others to help me improve my relationships.",
         "I show patience in my relationships with family and friends.",
         "I encourage others by pointing out their strengths rather than criticizing their weaknesses.",
         "My time commitments demonstrate that I value relationships over work/career/hobbies."
@@ -112,8 +112,8 @@ sections = {
         "I make my faith known to my neighbors and/or fellow employees.",
         "I intentionally maintain relationships with non-believers in order to share my testimony.",
         "When confronted about my faith, I remain consistent and firm in my testimony.",
-        "I help others understand how to effectively share a personal testimony.",
-        "I make sure the people I witness to get the follow-up and support needed to grow in Christ.",
+        "I help others learn how to share their personal stories about faith.",
+        "I ensure that those I share my faith with receive support to help them grow in Christ.",
         "I encourage my church and friends to support mission efforts.",
         "I am prepared to share my testimony at any time.",
         "My actions demonstrate a belief in and commitment to the Great Commission (Matthew 28:19-20)."
@@ -124,11 +124,11 @@ sections = {
         "I sacrificially contribute my finances/resources to help others in my church and community.",
         "I go out of my way to show love to people I meet.",
         "Meeting the needs of others provides a sense of purpose in my life.",
-        "I share biblical truth with those I serve as God gives opportunity.",
-        "I act as if other’s needs are as important as my own.",
+        "I share what the Bible teaches with those I help when I have the chance.",
+        "I act as if others' needs are as important as my own.",
         "I expect God to use me every day in His kingdom work.",
         "I regularly contribute time to a ministry at my church.",
-        "I help others identify ministry gifts and become involved in ministry."
+        "I assist others in discovering their gifts and getting involved in serving."
     ]
 }
 
