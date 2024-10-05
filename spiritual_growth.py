@@ -70,6 +70,9 @@ def generate_interpretation(section_name, average_score):
     )
     return response.choices[0].text.strip()
 
+gmail_user = os.getenv("GMAIL_USER")  # Set this environment variable
+gmail_password = os.getenv("GMAIL_PASSWORD")  # Set this environment variable
+
 
 def send_results_email(user_email, additional_emails, fig, averages):
     # Create a MIME email message
@@ -355,8 +358,6 @@ elif st.session_state.page == len(sections) + 2:
             send_results_email(user_email, additional_emails, fig, averages)
             st.success("Results emailed successfully!")
 
-gmail_user = os.getenv("GMAIL_USER")  # Set this environment variable
-gmail_password = os.getenv("GMAIL_PASSWORD")  # Set this environment variable
 
 def send_results_email(user_email, additional_emails, fig, averages):
     # Create a MIME email message
