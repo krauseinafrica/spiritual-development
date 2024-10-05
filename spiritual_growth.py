@@ -283,15 +283,22 @@ elif 2 <= st.session_state.page <= len(sections) + 1:
             else:
                 st.session_state.page += 1  # Move to the next page
             
+# Page for displaying results
 elif st.session_state.page == len(sections) + 2:
     st.header("Results")
 
     # Calculate averages for each section
     averages = {}
+    insights = {}
     likert_scale_values = {"Never": 1, "Rarely": 2, "Sometimes": 3, "Often": 4, "Always": 5}
+    
     for section in sections:
         responses = [likert_scale_values[resp] for resp in st.session_state.user_responses.get(section, []) if resp != ""]
         averages[section] = np.mean(responses) if responses else 0  # Prevent division by zero
+
+        # Generate interpretation using OpenAI
+        with st.spinner(f"Interpreting your results for '{section}'..."):
+            insights[section] = generate_interpretation(section, averages[section])
 
     # Create radar chart
     fig = go.Figure()
@@ -317,42 +324,18 @@ elif st.session_state.page == len(sections) + 2:
         showlegend=False
     )
 
-    # Display the radar chart
     st.plotly_chart(fig)
 
-    # Show average scores
-    st.header("Average Scores")
+    # Brief explanation of the results
+    st.header("Results Summary")
     for section, average in averages.items():
         st.write(f"{section}: {average:.2f}")
+        st.write(insights[section])  # Show insights on Streamlit
 
-    
-
-    # Initialize insights in session state
-    if 'insights_generated' not in st.session_state:
-        st.session_state.insights_generated = False
-
-    # Option to interpret results
-    if st.button("Get Insights on Your Results"):
-        if not st.session_state.insights_generated:
-            with st.spinner("Getting insights..."):
-                # Generate interpretations using your existing function
-                for section in sections.keys():
-                    interpretation = generate_interpretation(section, averages[section])
-                    st.markdown(f"### **{section} Insights**")
-                    st.write(interpretation)
-                
-                st.session_state.insights_generated = True  # Mark insights as generated
-        else:
-            st.warning("Insights have already been generated. Please refresh to get new insights.")
-
-    # Button to create PDF
+    # PDF Download Button
     if st.button("Download PDF of Results"):
-        pdf_file = create_pdf(averages, fig)
-        st.download_button(
-            label="Download PDF",
-            data=pdf_file,
-            file_name="spiritual_growth_assessment_results.pdf",
-            mime="application/pdf"
-        )
+        pdf = create_pdf(averages, insights, fig)  # Pass fig here
+        st.download_button("Download PDF", data=pdf, file_name="spiritual_growth_assessment_results.pdf", mime="application/pdf")
+
 
 
