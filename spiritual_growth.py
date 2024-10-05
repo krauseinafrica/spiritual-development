@@ -71,6 +71,53 @@ def generate_interpretation(section_name, average_score):
     return response.choices[0].text.strip()
 
 
+def send_results_email(user_email, additional_emails, fig, averages):
+    # Create a MIME email message
+    msg = MIMEMultipart()
+    msg['From'] = gmail_user  # Replace with your Gmail account
+    msg['To'] = user_email
+    msg['Subject'] = "Your Spiritual Growth Assessment Results"
+
+    # Create email body
+    body = "Here are your results:\n\n"
+    for section, average in averages.items():
+        body += f"{section}: {average:.2f}\n"
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    # Save the radar chart to a BytesIO object
+    buf = io.BytesIO()
+    fig.write_image(buf, format='png')
+    buf.seek(0)
+
+    # Attach radar chart
+    attachment = MIMEText(buf.read(), 'png')
+    attachment.add_header('Content-Disposition', 'attachment; filename="radar_chart.png"')
+    msg.attach(attachment)
+
+    # Send the email using Gmail's SMTP server
+    try:
+        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+            server.starttls()  # Secure the connection
+            server.login(gmail_user, gmail_password)  # Use your Gmail account and App Password
+            server.send_message(msg)
+            print(f"Email sent to {user_email}")
+    except Exception as e:
+        print(f"Failed to send email: {str(e)}")
+
+    # Send to additional emails if provided
+    if additional_emails:
+        for email in additional_emails.split(','):
+            email = email.strip()
+            msg['To'] = email  # Change recipient
+            try:
+                with smtplib.SMTP('smtp.gmail.com', 587) as server:
+                    server.starttls()
+                    server.login(gmail_user, gmail_password)
+                    server.send_message(msg)
+                    print(f"Email sent to {email}")
+            except Exception as e:
+                print(f"Failed to send email to {email}: {str(e)}")
 
 # Set up session state to manage the current page and user responses
 if "page" not in st.session_state:
