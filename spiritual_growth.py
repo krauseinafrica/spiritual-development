@@ -176,74 +176,57 @@ sections = {
         "I assist others in discovering their gifts and getting involved in serving."
     ]
 }
+# Initialize user responses dictionary in session state
+if "user_responses" not in st.session_state:
+    st.session_state.user_responses = {section: [] for section in sections}
 
 # Page 1: User Information
 if st.session_state.page == 1:
     st.title("Spiritual Growth Assessment")
+
     st.header("User Information")
-    st.write("Please fill in your personal information and your parent's information (if applicable) to help us understand your context better.")
-
-    st.session_state.name = st.text_input("Name (required)", value=st.session_state.name)
-
-    st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=st.session_state.age, step=1)
+    st.session_state.name = st.text_input("Name (required)")
+    st.session_state.age = st.number_input("Age (required)", min_value=0, max_value=120, value=18, step=1)
 
     if st.session_state.age < 18:
         st.header("Parent Information")
-        st.session_state.parent_name = st.text_input("Parent's Name (required)", value=st.session_state.parent_name)
-        st.session_state.parent_contact = st.text_input("Parent's Contact Information (required)", value=st.session_state.parent_contact)
+        st.session_state.parent_name = st.text_input("Parent's Name (required)")
+        st.session_state.parent_contact = st.text_input("Parent's Contact Information (required)")
 
-    # Show the error message only when the user clicks the Next button
     if st.button("Next"):
-        # Validate user input
         if not st.session_state.name:
             st.error("Please enter your name.")
         elif st.session_state.age < 18 and (not st.session_state.parent_name or not st.session_state.parent_contact):
             st.error("Please enter both parent's name and contact information.")
         else:
-            st.session_state.page += 1  # Move to the next page
+            next_page()
 
-# User Information Section
-if st.session_state.page == 0:
-    st.header("User Information")
-    st.write("Please fill in your personal information and your parent's information (if applicable) to help us understand your context better.")
-    
-    # User info fields here
-    name = st.text_input("Name", key="name")
-    age = st.number_input("Age", min_value=1, max_value=120, value=18, key="age")
-    parent_name = st.text_input("Parent's Name (if applicable)", key="parent_name")
+# Pages for each section
+elif 2 <= st.session_state.page <= len(sections) + 1:
+    section_index = st.session_state.page - 2
+    section_name = list(sections.keys())[section_index]
+    st.header(section_name)
 
-    # Navigation buttons
-    if st.button("Next"):
-        if name and age:
-            st.session_state.page += 1
+    # Define Likert scale options with a blank default
+    likert_scale = ["", "Never", "Rarely", "Sometimes", "Often", "Always"]
+    likert_scale_values = {option: i for i, option in enumerate(likert_scale) if option != ""}
+
+    # Ask questions for the current section
+    for question in sections[section_name]:
+        response = st.selectbox(question, likert_scale, index=0, key=f"{section_name}_{question}")
+        if len(st.session_state.user_responses[section_name]) < len(sections[section_name]):
+            st.session_state.user_responses[section_name].append(response)
         else:
-            st.warning("Please fill out your name and age before proceeding.")
+            st.session_state.user_responses[section_name][sections[section_name].index(question)] = response
 
-# Dynamic Sections for Each Assessment Area
-sections = list(section_descriptions.keys())
-for idx, section in enumerate(sections):
-    if st.session_state.page == idx + 1:
-        st.header(section)
-        st.write(section_descriptions[section])  # Add description for the section
+    if st.button("Next"):
+        if any(response == "" for response in st.session_state.user_responses[section_name]):
+            st.error("Please answer all questions before proceeding.")
+        else:
+            next_page()
 
-        # Questions for the section
-        questions = ["Question 1", "Question 2"]  # Replace with your actual questions
-        for question in questions:
-            response_key = f"{section}_{question}"
-            st.radio(question, options=["Never", "Rarely", "Sometimes", "Often", "Always"], key=response_key)
-            st.session_state.responses[section][question] = st.session_state.get(response_key, None)
-
-        # Navigation buttons
-        col1, col2 = st.columns([1, 1])
-        with col1:
-            if st.button("Previous"):
-                st.session_state.page -= 1
-        with col2:
-            if st.button("Next"):
-                if all(st.session_state.responses[section].get(question) for question in questions):
-                    st.session_state.page += 1
-                else:
-                    st.warning("Please answer all questions before proceeding.")
+    if st.button("Previous"):
+        prev_page()
 
 # Page for displaying results
 elif st.session_state.page == len(sections) + 2:
