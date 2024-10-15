@@ -6,3 +6,4 @@ openai
 matplotlib
 kaleido
 reportlab
+gspread
