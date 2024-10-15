@@ -3,6 +3,8 @@ import numpy as np
 import plotly.graph_objects as go
 import openai
 from openai import OpenAI
+from oauth2client.service_account import ServiceAccountCredentials
+
 
 # client = OpenAI(api_key = "<API_KEY>")
 # client = st.secrets["openai"]["API_KEY"]
