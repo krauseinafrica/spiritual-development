@@ -7,3 +7,4 @@ matplotlib
 kaleido
 reportlab
 gspread
+oauth2client
