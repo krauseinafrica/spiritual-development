@@ -5,6 +5,19 @@ import openai
 from openai import OpenAI
 from oauth2client.service_account import ServiceAccountCredentials
 
+def authenticate_gsheets():
+    creds_dict = st.secrets["gcp_service_account"]
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(
+        creds_dict, ["https://www.googleapis.com/auth/spreadsheets"]
+    )
+    client = gspread.authorize(creds)
+    return client
+
+# Connect to Google Sheets
+client = authenticate_gsheets()
+sheet = client.open("Streamlit Spiritual Formations").sheet1  # Open the first sheet
+
+
 
 # client = OpenAI(api_key = "<API_KEY>")
 # client = st.secrets["openai"]["API_KEY"]
